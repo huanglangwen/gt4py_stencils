@@ -1,8 +1,8 @@
-from gtstencil_example import BACKEND, FIELD_FLOAT
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 from gt4py import gtscript
 from gt4py.gtscript import PARALLEL, FORWARD, BACKWARD, computation, interval
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def fix_interior(
     q: FIELD_FLOAT, dp: FIELD_FLOAT, zfix: FIELD_FLOAT, upper_fix: FIELD_FLOAT, lower_fix: FIELD_FLOAT, dm: FIELD_FLOAT, dm_pos: FIELD_FLOAT
 ):
@@ -38,7 +38,7 @@ def fix_interior(
         dm = q * dp
         dm_pos = dm if dm > 0.0 else 0.0
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def sim1_solver(
     w: FIELD_FLOAT,
     dm: FIELD_FLOAT,
@@ -158,7 +158,7 @@ def p_weighted_average_domain(vel, dp0):
     int_ratio = 1.0 / (dp0[0, 0, -1] + dp0)
     return (dp0 * vel[0, 0, -1] + dp0[0, 0, -1] * vel) * int_ratio
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def update_dz_c(
     dp_ref: FIELD_FLOAT,
     zs: FIELD_FLOAT,
@@ -195,7 +195,7 @@ def update_dz_c(
         gz_kp1 = gz[0, 0, 1] + DZ_MIN
         gz = gz if gz > gz_kp1 else gz_kp1
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def satadjust_part1(
     wqsat: FIELD_FLOAT,
     dq2dt: FIELD_FLOAT,

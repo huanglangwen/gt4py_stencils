@@ -8,10 +8,10 @@ try:
 except ImportError:
     import os, sys
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-    from gtstencil_example import BACKEND, DTYPE_FLOAT, FIELD_FLOAT
+    from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
     from gtstencil_example.thomas_solver import thomas_solver_outofplace, thomas_solver_inplace
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def matmul_v(
     a: FIELD_FLOAT,
     b: FIELD_FLOAT,
@@ -36,21 +36,22 @@ def matmul_v(
         with interval(0, 1):
             d = b*x + c*x[0, 0, 1]
         with interval(1, -1):
-            d = a*x[0, 0, -1] + b*x + c*x[0, 0, -1]
+            d = a*x[0, 0, -1] + b*x + c*x[0, 0, 1]
         with interval(-1, None):
             d = a*x[0, 0, -1] + b*x
 
+n = 1000
+
 def get_storages(shape, origin):
-    a = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    b = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    c = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    x = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    a = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    b = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    c = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    x = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
     d = gt_storage.empty(BACKEND, origin, shape, dtype=DTYPE_FLOAT)
     matmul_v(a, b, c, x, d)
     return a, b, c, d, x
 
 def test_thomas_solver_outofplace():
-    n = 100
     shape = (1, 1, n)
     default_origin = (0, 0, 0)
     a, b, c, d, x = get_storages(shape, default_origin)
@@ -64,7 +65,6 @@ def test_thomas_solver_outofplace():
     assert np.allclose(x_np, x1_np)
 
 def test_thomas_solver_inplace():
-    n = 100
     shape = (1, 1, n)
     default_origin = (0, 0, 0)
     a, b, c, d, x = get_storages(shape, default_origin)

@@ -1,8 +1,8 @@
-from gtstencil_example import BACKEND, FIELD_FLOAT
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 from gt4py import gtscript
 from gt4py.gtscript import PARALLEL, FORWARD, BACKWARD, computation, interval
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def thomas_solver_outofplace(
     a: FIELD_FLOAT,
     b: FIELD_FLOAT,
@@ -30,16 +30,18 @@ def thomas_solver_outofplace(
         with interval(0, 1):
             c1 = c/b
             d1 = d/b
-        with interval(1, None):
+        with interval(1, -1):
             c1 = c/(b - a*c1[0, 0, -1])
-            d1 = (d1 - a*d1[0, 0, -1])/(b - a*c1[0, 0, -1])
+            d1 = (d - a*d1[0, 0, -1])/(b - a*c1[0, 0, -1])
+        with interval(-1, None):
+            d1 = (d - a*d1[0, 0, -1])/(b - a*c1[0, 0, -1])
     with computation(BACKWARD):
         with interval(-1, None):
             x = d1
         with interval(0, -1):
             x = d1 - c1*x[0, 0, 1]
 
-@gtscript.stencil(backend = BACKEND)
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def thomas_solver_inplace(
     a: FIELD_FLOAT,
     b: FIELD_FLOAT,
