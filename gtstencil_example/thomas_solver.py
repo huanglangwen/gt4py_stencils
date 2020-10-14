@@ -12,20 +12,20 @@ def thomas_solver_outofplace(
     d1: FIELD_FLOAT
     x: FIELD_FLOAT
 ):
-"""
-Non inplace version of Thomas solver for tridiagonal system of size n:
+    """
+    Non inplace version of Thomas solver for tridiagonal system of size n:
 
-[b0 c0            ] [x0]   [d0]
-[a1 b1 c1         ] [x1]   [d1]
-[   a2 b2 c2      ] [x2] = [d2]
-[      ...        ] [..]   [..]
-[         ... cn-1] [..]   [..]
-[            an bn] [xn]   [dn]
+    [b0 c0            ] [x0]   [d0]
+    [a1 b1 c1         ] [x1]   [d1]
+    [   a2 b2 c2      ] [x2] = [d2]
+    [      ...        ] [..]   [..]
+    [         ... cn-1] [..]   [..]
+    [            an bn] [xn]   [dn]
 
-All input arrays have the shape of (1, 1, n)
-Assume a[0] = c[n] = 0, even they are not zeros!
-c1 and d1 act as temporary buffer for storing intermediate results
-"""
+    All input arrays have the shape of (1, 1, n)
+    Assume a[0] = c[n] = 0, even they are not zeros!
+    c1 and d1 act as temporary buffer for storing intermediate results
+    """
     with computation(FORWARD):
         with interval(0, 1):
             c1 = c/b
@@ -47,20 +47,20 @@ def thomas_solver_inplace(
     d: FIELD_FLOAT
     x: FIELD_FLOAT
 ):
-"""
-Inplace version of Thomas solver for tridiagonal system of size n:
+    """
+    Inplace version of Thomas solver for tridiagonal system of size n:
 
-[b0 c0            ] [x0]   [d0]
-[a1 b1 c1         ] [x1]   [d1]
-[   a2 b2 c2      ] [x2] = [d2]
-[      ...        ] [..]   [..]
-[         ... cn-1] [..]   [..]
-[            an bn] [xn]   [dn]
+    [b0 c0            ] [x0]   [d0]
+    [a1 b1 c1         ] [x1]   [d1]
+    [   a2 b2 c2      ] [x2] = [d2]
+    [      ...        ] [..]   [..]
+    [         ... cn-1] [..]   [..]
+    [            an bn] [xn]   [dn]
 
-All input arrays have the shape of (1, 1, n)
-Assume a[0] = c[n] = 0, even they are not zeros!
-!CAUTION!: b and d will be modified during the computation
-"""
+    All input arrays have the shape of (1, 1, n)
+    Assume a[0] = c[n] = 0, even they are not zeros!
+    !CAUTION!: b and d will be modified during the computation
+    """
     with computation(FORWARD):
         with interval(1, None):
             w = a/b[0, 0, -1]

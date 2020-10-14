@@ -19,19 +19,19 @@ def matmul_v(
     x: FIELD_FLOAT,
     d: FIELD_FLOAT
 ):
-"""
-Tridiagonal matrix - vector multiplication
+    """
+    Tridiagonal matrix - vector multiplication
 
-[b0 c0            ] [x0]   [d0]
-[a1 b1 c1         ] [x1]   [d1]
-[   a2 b2 c2      ] [x2] = [d2]
-[      ...        ] [..]   [..]
-[         ... cn-1] [..]   [..]
-[            an bn] [xn]   [dn]
+    [b0 c0            ] [x0]   [d0]
+    [a1 b1 c1         ] [x1]   [d1]
+    [   a2 b2 c2      ] [x2] = [d2]
+    [      ...        ] [..]   [..]
+    [         ... cn-1] [..]   [..]
+    [            an bn] [xn]   [dn]
 
-All input arrays have the shape of (1, 1, n)
-Assume a[0] = c[n] = 0, even they are not zeros!
-"""
+    All input arrays have the shape of (1, 1, n)
+    Assume a[0] = c[n] = 0, even they are not zeros!
+    """
     with computation(PARALLEL):
         with interval(0, 1):
             d = b*x + c*x[0, 0, 1]
