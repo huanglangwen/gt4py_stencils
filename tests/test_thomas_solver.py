@@ -35,16 +35,16 @@ def matmul_v(
     with computation(PARALLEL):
         with interval(0, 1):
             d = b*x + c*x[0, 0, 1]
-        with interval(-1, None):
-            d = a*x[0, 0, -1] + b*x
         with interval(1, -1):
             d = a*x[0, 0, -1] + b*x + c*x[0, 0, -1]
+        with interval(-1, None):
+            d = a*x[0, 0, -1] + b*x
 
 def get_storages(shape, origin):
-    a = gt_storage.from_array(np.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    b = gt_storage.from_array(np.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    c = gt_storage.from_array(np.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
-    x = gt_storage.from_array(np.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    a = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    b = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    c = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
+    x = gt_storage.from_array(np.random.randn(shape), BACKEND, origin, dtype=DTYPE_FLOAT)
     d = gt_storage.empty(BACKEND, origin, shape, dtype=DTYPE_FLOAT)
     matmul_v(a, b, c, x, d)
     return a, b, c, d, x
