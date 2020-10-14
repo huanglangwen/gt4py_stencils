@@ -48,6 +48,10 @@ def get_storages(shape, origin):
     c = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
     x = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
     d = gt_storage.empty(BACKEND, origin, shape, dtype=DTYPE_FLOAT)
+    a.host_to_device()
+    b.host_to_device()
+    c.host_to_device()
+    x.host_to_device()
     matmul_v(a, b, c, x, d)
     return a, b, c, d, x
 
@@ -60,6 +64,8 @@ def test_thomas_solver_outofplace():
     x1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
 
     thomas_solver_outofplace(a, b, c, d, c1, d1, x1)
+    x1.device_to_host()
+    x.device_to_host()
     x1_np = x1.view(np.ndarray)
     x_np = x.view(np.ndarray)
     assert np.allclose(x_np, x1_np)
@@ -71,6 +77,8 @@ def test_thomas_solver_inplace():
     x1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
 
     thomas_solver_inplace(a, b, c, d, x1)
+    x1.device_to_host()
+    x.device_to_host()
     x1_np = x1.view(np.ndarray)
     x_np = x.view(np.ndarray)
     assert np.allclose(x_np, x1_np)
