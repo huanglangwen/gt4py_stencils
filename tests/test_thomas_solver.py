@@ -8,8 +8,8 @@ try:
 except ImportError:
     import os, sys
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-    from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
-    from gtstencil_example.thomas_solver import thomas_solver_outofplace, thomas_solver_inplace
+from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
+from gtstencil_example.thomas_solver import thomas_solver_outofplace, thomas_solver_inplace
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def matmul_v(
