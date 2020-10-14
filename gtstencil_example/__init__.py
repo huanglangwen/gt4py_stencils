@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from gt4py import gtscript
 
 if "GT4PY_BACKEND" in os.environ:
     BACKEND    = os.environ["GT4PY_BACKEND"]

@@ -4,12 +4,12 @@ from gt4py.gtscript import PARALLEL, FORWARD, BACKWARD, computation, interval
 
 @gtscript.stencil(backend = BACKEND)
 def thomas_solver_outofplace(
-    a: FIELD_FLOAT
-    b: FIELD_FLOAT
-    c: FIELD_FLOAT
-    d: FIELD_FLOAT
-    c1: FIELD_FLOAT
-    d1: FIELD_FLOAT
+    a: FIELD_FLOAT,
+    b: FIELD_FLOAT,
+    c: FIELD_FLOAT,
+    d: FIELD_FLOAT,
+    c1: FIELD_FLOAT,
+    d1: FIELD_FLOAT,
     x: FIELD_FLOAT
 ):
     """
@@ -41,10 +41,10 @@ def thomas_solver_outofplace(
 
 @gtscript.stencil(backend = BACKEND)
 def thomas_solver_inplace(
-    a: FIELD_FLOAT
-    b: FIELD_FLOAT
-    c: FIELD_FLOAT
-    d: FIELD_FLOAT
+    a: FIELD_FLOAT,
+    b: FIELD_FLOAT,
+    c: FIELD_FLOAT,
+    d: FIELD_FLOAT,
     x: FIELD_FLOAT
 ):
     """
