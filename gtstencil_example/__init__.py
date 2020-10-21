@@ -10,3 +10,15 @@ else:
 DTYPE_FLOAT = np.float64
 FIELD_FLOAT = gtscript.Field[DTYPE_FLOAT]
 REBUILD = True
+
+tracer_variables = [
+    "qvapor",
+    "qliquid",
+    "qrain",
+    "qice",
+    "qsnow",
+    "qgraupel",
+    "qo3mr",
+    "qsgs_tke",
+    "qcld",
+]
