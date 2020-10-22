@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
 import numpy as np
+
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 
 import fv3core._config as spec
 import fv3core.stencils.sim1_solver as sim1_solver
@@ -8,22 +9,18 @@ import fv3core.utils.gt4py_utils as utils
 from fv3core.decorators import gtstencil
 from fv3core.stencils.basic_operations import copy
 
-
-sd = utils.sd
-
-
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
-    cp3: sd,
-    gz: sd,
-    dm: sd,
-    q_con: sd,
-    pem: sd,
-    peg: sd,
-    dz: sd,
-    gm: sd,
-    pef: sd,
-    pm: sd,
+    cp3: FIELD_FLOAT,
+    gz: FIELD_FLOAT,
+    dm: FIELD_FLOAT,
+    q_con: FIELD_FLOAT,
+    pem: FIELD_FLOAT,
+    peg: FIELD_FLOAT,
+    dz: FIELD_FLOAT,
+    gm: FIELD_FLOAT,
+    pef: FIELD_FLOAT,
+    pm: FIELD_FLOAT,
     ptop: float,
 ):
     with computation(FORWARD):
@@ -44,8 +41,8 @@ def precompute(
         pm = (peg[0, 0, 1] - peg) / log(peg[0, 0, 1] / peg)
 
 
-@gtstencil()
-def finalize(pe2: sd, pem: sd, hs: sd, dz: sd, pef: sd, gz: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def finalize(pe2: FIELD_FLOAT, pem: FIELD_FLOAT, hs: FIELD_FLOAT, dz: FIELD_FLOAT, pef: FIELD_FLOAT, gz: FIELD_FLOAT):
     # TODO: we only want to bottom level of hd, so this could be removed once hd0 is a 2d field
     with computation(FORWARD):
         with interval(0, 1):

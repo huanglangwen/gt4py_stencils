@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+
 import gt4py as gt
 import gt4py.gtscript as gtscript
 import numpy as np
@@ -9,22 +10,18 @@ import fv3core.utils.global_constants as constants
 import fv3core.utils.gt4py_utils as utils
 from fv3core.decorators import gtstencil
 
-
-sd = utils.sd
-
-
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def sim1_solver(
-    w: sd,
-    dm: sd,
-    gm: sd,
-    dz: sd,
-    ptr: sd,
-    pm: sd,
-    pe: sd,
-    pem: sd,
-    wsr: sd,
-    cp3: sd,
+    w: FIELD_FLOAT,
+    dm: FIELD_FLOAT,
+    gm: FIELD_FLOAT,
+    dz: FIELD_FLOAT,
+    ptr: FIELD_FLOAT,
+    pm: FIELD_FLOAT,
+    pe: FIELD_FLOAT,
+    pem: FIELD_FLOAT,
+    wsr: FIELD_FLOAT,
+    cp3: FIELD_FLOAT,
     dt: float,
     t1g: float,
     rdt: float,

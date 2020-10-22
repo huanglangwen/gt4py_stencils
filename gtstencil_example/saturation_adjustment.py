@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
 import math
+
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 
 import gt4py.gtscript as gtscript
 from gt4py.gtscript import PARALLEL, computation, interval
@@ -13,7 +14,7 @@ from fv3core.stencils.basic_operations import dim
 
 
 # TODO, this code could be reduced greatly with abstraction, but first gt4py needs to support gtscript function calls of arbitrary depth embedded in conditionals
-sd = utils.sd
+
 si = utils.si
 DC_VAP = constants.CP_VAP - constants.C_LIQ  # - 2339.5, isobaric heating / cooling
 DC_ICE = constants.C_LIQ - constants.C_ICE  # 2213.5, isobaric heating / cooling
@@ -519,8 +520,8 @@ def wqsat_correct(src, pt1, lhl, qv, ql, q_liq, q_sol, mc_air, c_vap):
     return qv, ql, q_liq, cvm, pt1
 
 
-@gtstencil()
-def ap1_stencil(ta: sd, ap1: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def ap1_stencil(ta: FIELD_FLOAT, ap1: FIELD_FLOAT):
     with computation(PARALLEL), interval(...):
         ap1 = ap1_for_wqs2(ta)
 
@@ -610,14 +611,14 @@ def wqs1_fn_2(it, ap1, ta, den):
     return wqsat_wsq1(table2, des2, ap1, it, ta, den)
 
 
-@gtstencil()
-def wqs2_stencil_w(ta: sd, den: sd, wqsat: sd, dqdt: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def wqs2_stencil_w(ta: FIELD_FLOAT, den: FIELD_FLOAT, wqsat: FIELD_FLOAT, dqdt: FIELD_FLOAT):
     with computation(PARALLEL), interval(...):
         wqsat, dqdt = wqs2_fn_w(ta, den)
 
 
-@gtstencil()
-def compute_q_tables(index: sd, tablew: sd, table2: sd, table: sd, desw: sd, des2: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def compute_q_tables(index: FIELD_FLOAT, tablew: FIELD_FLOAT, table2: FIELD_FLOAT, table: FIELD_FLOAT, desw: FIELD_FLOAT, des2: FIELD_FLOAT):
     with computation(PARALLEL), interval(...):
         tablew = qs_tablew_fn(index)
         table2 = qs_table2_fn(index)
@@ -626,34 +627,34 @@ def compute_q_tables(index: sd, tablew: sd, table2: sd, table: sd, desw: sd, des
         des2 = des2_table(index)
 
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def satadjust_part1(
-    wqsat: sd,
-    dq2dt: sd,
-    dpln: sd,
-    den: sd,
-    pt1: sd,
-    cvm: sd,
-    mc_air: sd,
-    peln: sd,
-    qv: sd,
-    ql: sd,
-    q_liq: sd,
-    qi: sd,
-    qr: sd,
-    qs: sd,
-    q_sol: sd,
-    qg: sd,
-    pt: sd,
-    dp: sd,
-    delz: sd,
-    te0: sd,
-    qpz: sd,
-    lhl: sd,
-    lhi: sd,
-    lcp2: sd,
-    icp2: sd,
-    tcp3: sd,
+    wqsat: FIELD_FLOAT,
+    dq2dt: FIELD_FLOAT,
+    dpln: FIELD_FLOAT,
+    den: FIELD_FLOAT,
+    pt1: FIELD_FLOAT,
+    cvm: FIELD_FLOAT,
+    mc_air: FIELD_FLOAT,
+    peln: FIELD_FLOAT,
+    qv: FIELD_FLOAT,
+    ql: FIELD_FLOAT,
+    q_liq: FIELD_FLOAT,
+    qi: FIELD_FLOAT,
+    qr: FIELD_FLOAT,
+    qs: FIELD_FLOAT,
+    q_sol: FIELD_FLOAT,
+    qg: FIELD_FLOAT,
+    pt: FIELD_FLOAT,
+    dp: FIELD_FLOAT,
+    delz: FIELD_FLOAT,
+    te0: FIELD_FLOAT,
+    qpz: FIELD_FLOAT,
+    lhl: FIELD_FLOAT,
+    lhi: FIELD_FLOAT,
+    lcp2: FIELD_FLOAT,
+    icp2: FIELD_FLOAT,
+    tcp3: FIELD_FLOAT,
     zvir: float,
     hydrostatic: bool,
     consv_te: bool,
@@ -746,34 +747,34 @@ def satadjust_part1(
 
 
 # TODO reading in ql0_max as a runtime argument causes problems for the if statement
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def satadjust_part2(
-    wqsat: sd,
-    dq2dt: sd,
-    pt1: sd,
-    pt: sd,
-    cvm: sd,
-    mc_air: sd,
-    tcp3: sd,
-    lhl: sd,
-    lhi: sd,
-    lcp2: sd,
-    icp2: sd,
-    qv: sd,
-    ql: sd,
-    q_liq: sd,
-    qi: sd,
-    q_sol: sd,
-    den: sd,
-    qr: sd,
-    qg: sd,
-    qs: sd,
-    cappa: sd,
-    dp: sd,
-    tin: sd,
-    te0: sd,
-    q_cond: sd,
-    q_con: sd,
+    wqsat: FIELD_FLOAT,
+    dq2dt: FIELD_FLOAT,
+    pt1: FIELD_FLOAT,
+    pt: FIELD_FLOAT,
+    cvm: FIELD_FLOAT,
+    mc_air: FIELD_FLOAT,
+    tcp3: FIELD_FLOAT,
+    lhl: FIELD_FLOAT,
+    lhi: FIELD_FLOAT,
+    lcp2: FIELD_FLOAT,
+    icp2: FIELD_FLOAT,
+    qv: FIELD_FLOAT,
+    ql: FIELD_FLOAT,
+    q_liq: FIELD_FLOAT,
+    qi: FIELD_FLOAT,
+    q_sol: FIELD_FLOAT,
+    den: FIELD_FLOAT,
+    qr: FIELD_FLOAT,
+    qg: FIELD_FLOAT,
+    qs: FIELD_FLOAT,
+    cappa: FIELD_FLOAT,
+    dp: FIELD_FLOAT,
+    tin: FIELD_FLOAT,
+    te0: FIELD_FLOAT,
+    q_cond: FIELD_FLOAT,
+    q_con: FIELD_FLOAT,
     sdt: float,
     adj_fac: float,
     zvir: float,
@@ -951,16 +952,16 @@ def satadjust_part2(
                 tin = pt1 - (lcp2 * q_cond + icp2 * q_sol)
 
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def satadjust_part3_laststep_qa(
-    qa: sd,
-    area: sd,
-    qpz: sd,
-    hs: sd,
-    tin: sd,
-    q_cond: sd,
-    q_sol: sd,
-    den: sd,
+    qa: FIELD_FLOAT,
+    area: FIELD_FLOAT,
+    qpz: FIELD_FLOAT,
+    hs: FIELD_FLOAT,
+    tin: FIELD_FLOAT,
+    q_cond: FIELD_FLOAT,
+    q_sol: FIELD_FLOAT,
+    den: FIELD_FLOAT,
 ):
     with computation(PARALLEL), interval(...):
         it, ap1 = ap1_and_index(tin)

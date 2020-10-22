@@ -1,3 +1,5 @@
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+
 import gt4py.gtscript as gtscript
 from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval
 
@@ -8,11 +10,8 @@ from fv3core.decorators import gtstencil
 from fv3core.stencils.basic_operations import copy
 from fv3core.utils.corners import fill_4corners
 
-
-sd = utils.sd
 origin = (1, 1, 0)
 DZ_MIN = constants.DZ_MIN
-
 
 @gtscript.function
 def p_weighted_average_top(vel, dp0):
@@ -42,17 +41,17 @@ def xy_flux(gz_x, gz_y, xfx, yfx):
     fy = yfx * (gz_y[0, -1, 0] if yfx > 0.0 else gz_y)
     return fx, fy
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def update_dz_c(
-    dp_ref: sd,
-    zs: sd,
-    area: sd,
-    ut: sd,
-    vt: sd,
-    gz: sd,
-    gz_x: sd,
-    gz_y: sd,
-    ws3: sd,
+    dp_ref: FIELD_FLOAT,
+    zs: FIELD_FLOAT,
+    area: FIELD_FLOAT,
+    ut: FIELD_FLOAT,
+    vt: FIELD_FLOAT,
+    gz: FIELD_FLOAT,
+    gz_x: FIELD_FLOAT,
+    gz_y: FIELD_FLOAT,
+    ws3: FIELD_FLOAT,
     *,
     dt: float,
 ):

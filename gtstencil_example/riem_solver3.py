@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
 import math
 
 import numpy as np
+
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 
 import fv3core._config as spec
 import fv3core.stencils.sim1_solver as sim1_solver
@@ -10,24 +11,20 @@ import fv3core.utils.gt4py_utils as utils
 from fv3core.decorators import gtstencil
 from fv3core.stencils.basic_operations import copy
 
-
-sd = utils.sd
-
-
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
-    cp3: sd,
-    dm: sd,
-    zh: sd,
-    q_con: sd,
-    pem: sd,
-    peln: sd,
-    pk3: sd,
-    peg: sd,
-    pelng: sd,
-    gm: sd,
-    dz: sd,
-    pm: sd,
+    cp3: FIELD_FLOAT,
+    dm: FIELD_FLOAT,
+    zh: FIELD_FLOAT,
+    q_con: FIELD_FLOAT,
+    pem: FIELD_FLOAT,
+    peln: FIELD_FLOAT,
+    pk3: FIELD_FLOAT,
+    peg: FIELD_FLOAT,
+    pelng: FIELD_FLOAT,
+    gm: FIELD_FLOAT,
+    dz: FIELD_FLOAT,
+    pm: FIELD_FLOAT,
     ptop: float,
     peln1: float,
     ptk: float,
@@ -56,27 +53,27 @@ def precompute(
         dz = zh[0, 0, 1] - zh
 
 
-@gtstencil()
-def last_call_copy(peln_run: sd, peln: sd, pk3: sd, pk: sd, pem: sd, pe: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def last_call_copy(peln_run: FIELD_FLOAT, peln: FIELD_FLOAT, pk3: FIELD_FLOAT, pk: FIELD_FLOAT, pem: FIELD_FLOAT, pe: FIELD_FLOAT):
     with computation(PARALLEL), interval(...):
         peln = peln_run
         pk = pk3
         pe = pem
 
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def finalize(
-    zs: sd,
-    dz: sd,
-    zh: sd,
-    peln_run: sd,
-    peln: sd,
-    pk3: sd,
-    pk: sd,
-    pem: sd,
-    pe: sd,
-    ppe: sd,
-    pe_init: sd,
+    zs: FIELD_FLOAT,
+    dz: FIELD_FLOAT,
+    zh: FIELD_FLOAT,
+    peln_run: FIELD_FLOAT,
+    peln: FIELD_FLOAT,
+    pk3: FIELD_FLOAT,
+    pk: FIELD_FLOAT,
+    pem: FIELD_FLOAT,
+    pe: FIELD_FLOAT,
+    ppe: FIELD_FLOAT,
+    pe_init: FIELD_FLOAT,
     last_call: bool,
 ):
     with computation(PARALLEL), interval(...):

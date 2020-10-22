@@ -1,24 +1,15 @@
 import math as math
 
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+import gtstencil_example.utils as utils
+
 import gt4py.gtscript as gtscript
 import numpy as np
 from gt4py.gtscript import FORWARD, PARALLEL, computation, interval
 
-import fv3core._config as spec
-import fv3core.stencils.remap_profile as remap_profile
-import fv3core.utils.gt4py_utils as utils
-from fv3core.decorators import gtstencil
 
-
-sd = utils.sd
-
-
-def grid():
-    return spec.grid
-
-
-@gtstencil()
-def fix_top(q: sd, dp: sd, dm: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def fix_top(q: FIELD_FLOAT, dp: FIELD_FLOAT, dm: FIELD_FLOAT):
     with computation(PARALLEL), interval(1, 2):
         if q[0, 0, -1] < 0.0:
             q = (
@@ -30,9 +21,9 @@ def fix_top(q: sd, dp: sd, dm: sd):
         dm = q * dp
 
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def fix_interior(
-    q: sd, dp: sd, zfix: sd, upper_fix: sd, lower_fix: sd, dm: sd, dm_pos: sd
+    q: FIELD_FLOAT, dp: FIELD_FLOAT, zfix: FIELD_FLOAT, upper_fix: FIELD_FLOAT, lower_fix: FIELD_FLOAT, dm: FIELD_FLOAT, dm_pos: FIELD_FLOAT
 ):
     with computation(FORWARD), interval(1, -1):
         # if a higher layer borrowed from this one, account for that here
@@ -67,9 +58,9 @@ def fix_interior(
         dm_pos = dm if dm > 0.0 else 0.0
 
 
-@gtstencil()
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def fix_bottom(
-    q: sd, dp: sd, zfix: sd, upper_fix: sd, lower_fix: sd, dm: sd, dm_pos: sd
+    q: FIELD_FLOAT, dp: FIELD_FLOAT, zfix: FIELD_FLOAT, upper_fix: FIELD_FLOAT, lower_fix: FIELD_FLOAT, dm: FIELD_FLOAT, dm_pos: FIELD_FLOAT
 ):
     with computation(PARALLEL), interval(1, 2):
         if (
@@ -94,18 +85,18 @@ def fix_bottom(
             dm_pos = dm if dm > 0.0 else 0.0  # now we gotta update these too
 
 
-@gtstencil()
-def final_check(q: sd, dp: sd, dm: sd, zfix: sd, fac: sd):
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def final_check(q: FIELD_FLOAT, dp: FIELD_FLOAT, dm: FIELD_FLOAT, zfix: FIELD_FLOAT, fac: FIELD_FLOAT):
     with computation(PARALLEL), interval(...):
         if zfix > 0:
             if fac > 0:
                 q = fac * dm / dp if fac * dm / dp > 0.0 else 0.0
 
 
-def compute(dp2, tracers, im, km, nq, jslice):
+def compute(grid, dp2, tracers, im, km, nq, jslice):
     # Same as above, but with multiple tracer fields
     shape = tracers[utils.tracer_variables[0]].shape
-    i1 = grid().is_
+    i1 = grid.is_
     js = jslice.start
     j_extent = jslice.stop - jslice.start
     orig = (i1, js, 0)
