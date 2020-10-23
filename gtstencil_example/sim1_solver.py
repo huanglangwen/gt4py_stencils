@@ -5,10 +5,9 @@ import gt4py.gtscript as gtscript
 import numpy as np
 from gt4py.gtscript import PARALLEL, computation, interval
 
-import fv3core._config as spec
-import fv3core.utils.global_constants as constants
-import fv3core.utils.gt4py_utils as utils
-from fv3core.decorators import gtstencil
+import constants
+
+p_fac = 0.05
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def sim1_solver(
@@ -112,8 +111,7 @@ def sim1_solver(
 
 
 # TODO: implement MOIST_CAPPA=false
-def solve(is_, ie, js, je, dt, gm, cp3, pe, dm, pm, pem, w, dz, ptr, wsr):
-    grid = spec.grid
+def solve(grid, is_, ie, js, je, dt, gm, cp3, pe, dm, pm, pem, w, dz, ptr, wsr):
     nic = ie - is_ + 1
     njc = je - js + 1
     simshape = pe.shape
@@ -135,7 +133,7 @@ def solve(is_, ie, js, je, dt, gm, cp3, pe, dm, pm, pem, w, dz, ptr, wsr):
         dt,
         t1g,
         rdt,
-        spec.namelist.p_fac,
+        p_fac,
         origin=simorigin,
         domain=simdomainplus,
     )

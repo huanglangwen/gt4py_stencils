@@ -2,6 +2,8 @@ import gt4py as gt
 import numpy as np
 
 from gtstencil_example import BACKEND, DTYPE_FLOAT, FIELD_FLOAT
+from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval, region
+from gt4py import gtscript
 
 try:
     import cupy as cp
@@ -65,3 +67,110 @@ def sum(array, axis=None, dtype=None, out=None, keepdims=False):
 def repeat(array, repeats, axis=None):
     xp = cp if cp and type(array) is cp.ndarray else np
     return xp.repeat(array.data, repeats, axis)
+
+def copy(q_in, origin=(0, 0, 0), domain=None):
+    """Copy q_in inside the origin and domain, and zero outside.
+
+    Args:
+        q_in: input field
+        origin: Origin of the copy and new field
+        domain: Extent to copy
+
+    Returns:
+        gtscript.Field[float]: Copied field
+    """
+    q_out = make_storage_from_shape(q_in.shape, origin, init=True)
+    copy_stencil(q_in, q_out, origin=origin, domain=domain)
+    return q_out
+
+@gtscript.function
+def fill_4corners_x(q: FIELD_FLOAT):
+    from __splitters__ import i_end, i_start, j_end, j_start
+
+    # copy field
+    q_out = q
+
+    # Southwest
+    with parallel(region[i_start - 2, j_start - 1]):
+        q_out = q[1, 2, 0]
+    with parallel(region[i_start - 1, j_start - 1]):
+        q_out = q[0, 1, 0]
+
+    # Southeast
+    with parallel(region[i_end + 2, j_start - 1]):
+        q_out = q[-1, 2, 0]
+    with parallel(region[i_end + 1, j_start - 1]):
+        q_out = q[0, 1, 0]
+
+    # Northwest
+    with parallel(region[i_start - 1, j_end + 1]):
+        q_out = q[0, -1, 0]
+    with parallel(region[i_start - 2, j_end + 1]):
+        q_out = q[1, -2, 0]
+
+    # Northeast
+    with parallel(region[i_end + 1, j_end + 1]):
+        q_out = q[0, -1, 0]
+    with parallel(region[i_end + 2, j_end + 1]):
+        q_out = q[-1, -2, 0]
+
+    return q_out
+
+
+@gtscript.function
+def fill_4corners_y(q: FIELD_FLOAT):
+    from __splitters__ import i_end, i_start, j_end, j_start
+
+    # copy field
+    q_out = q
+
+    # Southwest
+    with parallel(region[i_start - 1, j_start - 1]):
+        q_out = q[1, 0, 0]
+    with parallel(region[i_start - 1, j_start - 2]):
+        q_out = q[2, 1, 0]
+
+    # Southeast
+    with parallel(region[i_end + 1, j_start - 1]):
+        q_out = q[-1, 0, 0]
+    with parallel(region[i_end + 1, j_start - 2]):
+        q_out = q[-2, 1, 0]
+
+    # Northwest
+    with parallel(region[i_start - 1, j_end + 1]):
+        q_out = q[1, 0, 0]
+    with parallel(region[i_start - 1, j_end + 2]):
+        q_out = q[2, -1, 0]
+
+    # Northeast
+    with parallel(region[i_end + 1, j_end + 1]):
+        q_out = q[-1, 0, 0]
+    with parallel(region[i_end + 1, j_end + 2]):
+        q_out = q[-2, -1, 0]
+
+    return q_out
+
+def fill_4corners(q, direction, grid):
+    def definition(q: FIELD_FLOAT):
+        from __externals__ import func
+
+        with computation(PARALLEL), interval(...):
+            q = func(q)
+
+    extent = 3
+    origin = (grid.is_ - extent, grid.js - extent, 0)
+    domain = (grid.nic + 2 * extent, grid.njc + 2 * extent, q.shape[2])
+
+    kwargs = {
+        "origin": origin,
+        "domain": domain,
+    }
+
+    if direction == "x":
+        stencil = gtscript.stencil(definition=definition, externals={"func": fill_4corners_x})
+        stencil(q, **kwargs)
+    elif direction == "y":
+        stencil = gtscript.stencil(definition=definition, externals={"func": fill_4corners_y})
+        stencil(q, **kwargs)
+    else:
+        raise ValueError("Direction not recognized. Specify either x or y")

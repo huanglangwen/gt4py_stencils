@@ -3,12 +3,9 @@ from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 import gt4py.gtscript as gtscript
 from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval
 
-import fv3core._config as spec
-import fv3core.utils.global_constants as constants
-import fv3core.utils.gt4py_utils as utils
-from fv3core.decorators import gtstencil
-from fv3core.stencils.basic_operations import copy
-from fv3core.utils.corners import fill_4corners
+import constants
+import utils
+from utils import copy, fill_4corners
 
 origin = (1, 1, 0)
 DZ_MIN = constants.DZ_MIN
@@ -79,9 +76,8 @@ def update_dz_c(
         gz = gz if gz > gz_kp1 else gz_kp1
 
 
-def compute(dp_ref, zs, ut, vt, gz_in, ws3, dt2):
+def compute(grid, dp_ref, zs, ut, vt, gz_in, ws3, dt2):
     # TODO: once we have a concept for corners, the following 4 lines should be refactored
-    grid = spec.grid
     gz = copy(gz_in, origin=origin)
     gz_x = copy(gz, origin=origin)
     ws = copy(ws3, domain=grid.domain_shape_buffer_1cell())
@@ -102,6 +98,6 @@ def compute(dp_ref, zs, ut, vt, gz_in, ws3, dt2):
         origin=origin,
         domain=(grid.nic + 3, grid.njc + 3, grid.npz + 1),
     )
-    #grid.overwrite_edges(gz, gz_in, 2, 2)
-    #grid.overwrite_edges(ws3, ws, 2, 2)
+    grid.overwrite_edges(gz, gz_in, 2, 2)
+    grid.overwrite_edges(ws3, ws, 2, 2)
     return gz, ws3

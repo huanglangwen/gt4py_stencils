@@ -1,13 +1,13 @@
 import numpy as np
 
 from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+from gt4py import gtscript
+from gt4py.gtscript import FORWARD, PARALLEL, computation, interval
 
-import fv3core._config as spec
-import fv3core.stencils.sim1_solver as sim1_solver
-import fv3core.utils.global_constants as constants
-import fv3core.utils.gt4py_utils as utils
-from fv3core.decorators import gtstencil
-from fv3core.stencils.basic_operations import copy
+import sim1_solver
+import constants
+import utils
+from utils import copy
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
@@ -60,18 +60,17 @@ def finalize(pe2: FIELD_FLOAT, pem: FIELD_FLOAT, hs: FIELD_FLOAT, dz: FIELD_FLOA
 
 
 # TODO: this is totally inefficient, can we use stencils?
-def compute(ms, dt2, akap, cappa, ptop, hs, w3, ptc, q_con, delpc, gz, pef, ws):
-    grid = spec.grid
+def compute(grid, ms, dt2, akap, cappa, ptop, hs, w3, ptc, q_con, delpc, gz, pef, ws):
     is1 = grid.is_ - 1
     ie1 = grid.ie + 1
     js1 = grid.js - 1
     je1 = grid.je + 1
-    km = spec.grid.npz - 1
+    km = grid.npz - 1
     islice = slice(is1, ie1 + 1)
     kslice = slice(0, km + 1)
     kslice_shift = slice(1, km + 2)
     shape = w3.shape
-    domain = (spec.grid.nic + 2, grid.njc + 2, km + 2)
+    domain = (grid.nic + 2, grid.njc + 2, km + 2)
     riemorigin = (is1, js1, 0)
     dm = copy(delpc)
     cp3 = copy(cappa)

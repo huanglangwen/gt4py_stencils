@@ -1,10 +1,10 @@
 import math as math
+import numpy as np
 
 from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 import gtstencil_example.utils as utils
 
 import gt4py.gtscript as gtscript
-import numpy as np
 from gt4py.gtscript import FORWARD, PARALLEL, computation, interval
 
 

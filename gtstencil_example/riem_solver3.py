@@ -3,13 +3,13 @@ import math
 import numpy as np
 
 from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+from gt4py import gtscript
+from gt4py.gtscript import FORWARD, PARALLEL, computation, interval, __INLINED
 
-import fv3core._config as spec
-import fv3core.stencils.sim1_solver as sim1_solver
-import fv3core.utils.global_constants as constants
-import fv3core.utils.gt4py_utils as utils
-from fv3core.decorators import gtstencil
-from fv3core.stencils.basic_operations import copy
+import sim1_solver
+import constants
+import utils
+from utils import copy
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
@@ -60,6 +60,9 @@ def last_call_copy(peln_run: FIELD_FLOAT, peln: FIELD_FLOAT, pk3: FIELD_FLOAT, p
         pk = pk3
         pe = pem
 
+# https://github.com/VulcanClimateModeling/fv3gfs-fortran/blob/master/FV3/atmos_cubed_sphere/model/fv_arrays.F90
+use_logp = False
+beta = 0.0
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def finalize(
@@ -77,9 +80,9 @@ def finalize(
     last_call: bool,
 ):
     with computation(PARALLEL), interval(...):
-        if __INLINED(spec.namelist.use_logp):
+        if __INLINED(use_logp):
             pk3 = peln_run
-        if __INLINED(spec.namelist.beta < -0.1):
+        if __INLINED(beta < -0.1):
             ppe = pe + pem
         else:
             ppe = pe
@@ -97,6 +100,7 @@ def finalize(
 
 
 def compute(
+    grid,
     last_call,
     dt,
     akap,
@@ -116,7 +120,6 @@ def compute(
     peln,
     wsd,
 ):
-    grid = spec.grid
     rgrav = 1.0 / constants.GRAV
     km = grid.npz - 1
     peln1 = math.log(ptop)
