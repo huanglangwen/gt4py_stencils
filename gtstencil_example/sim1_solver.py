@@ -5,7 +5,7 @@ import gt4py.gtscript as gtscript
 import numpy as np
 from gt4py.gtscript import PARALLEL, computation, interval
 
-import constants
+from gtstencil_example import constants
 
 p_fac = 0.05
 

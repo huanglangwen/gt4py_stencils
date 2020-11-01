@@ -3,9 +3,9 @@ from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 import gt4py.gtscript as gtscript
 from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval
 
-import constants
-import utils
-from utils import copy, fill_4corners
+from gtstencil_example import constants
+from gtstencil_example import utils
+from gtstencil_example.utils import copy, fill_4corners
 
 origin = (1, 1, 0)
 DZ_MIN = constants.DZ_MIN

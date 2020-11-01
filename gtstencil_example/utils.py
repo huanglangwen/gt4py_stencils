@@ -1,14 +1,17 @@
 import gt4py as gt
 import numpy as np
 
-from gtstencil_example import BACKEND, DTYPE_FLOAT, FIELD_FLOAT
-from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval, region
+from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
+from gt4py.gtscript import BACKWARD, PARALLEL, computation, interval#, region
 from gt4py import gtscript
 
 try:
     import cupy as cp
 except ImportError:
     cp = None
+
+halo = 3
+origin = (halo, halo, 0)
 
 tracer_variables = [
     "qvapor",
@@ -68,6 +71,17 @@ def repeat(array, repeats, axis=None):
     xp = cp if cp and type(array) is cp.ndarray else np
     return xp.repeat(array.data, repeats, axis)
 
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def copy_stencil(q_in: FIELD_FLOAT, q_out: FIELD_FLOAT):
+    """Copy q_in to q_out.
+
+    Args:
+        q_in: input field
+        q_out: output field
+    """
+    with computation(PARALLEL), interval(...):
+        q_out = q_in
+
 def copy(q_in, origin=(0, 0, 0), domain=None):
     """Copy q_in inside the origin and domain, and zero outside.
 
@@ -83,6 +97,7 @@ def copy(q_in, origin=(0, 0, 0), domain=None):
     copy_stencil(q_in, q_out, origin=origin, domain=domain)
     return q_out
 
+"""No region def in gt4py
 @gtscript.function
 def fill_4corners_x(q: FIELD_FLOAT):
     from __splitters__ import i_end, i_start, j_end, j_start
@@ -149,6 +164,7 @@ def fill_4corners_y(q: FIELD_FLOAT):
         q_out = q[-2, -1, 0]
 
     return q_out
+"""
 
 def fill_4corners(q, direction, grid):
     def definition(q: FIELD_FLOAT):

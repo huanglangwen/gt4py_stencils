@@ -4,10 +4,10 @@ from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 from gt4py import gtscript
 from gt4py.gtscript import FORWARD, PARALLEL, computation, interval
 
-import sim1_solver
-import constants
-import utils
-from utils import copy
+from gtstencil_example import sim1_solver
+from gtstencil_example import constants
+from gtstencil_example import utils
+from gtstencil_example.utils import copy
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
@@ -97,5 +97,5 @@ def compute(grid, ms, dt2, akap, cappa, ptop, hs, w3, ptc, q_con, delpc, gz, pef
         origin=riemorigin,
         domain=domain,
     )
-    sim1_solver.solve(is1, ie1, js1, je1, dt2, gm, cp3, pe, dm, pm, pem, w, dz, ptc, ws)
+    sim1_solver.solve(grid, is1, ie1, js1, je1, dt2, gm, cp3, pe, dm, pm, pem, w, dz, ptc, ws)
     finalize(pe, pem, hs, dz, pef, gz, origin=riemorigin, domain=domain)

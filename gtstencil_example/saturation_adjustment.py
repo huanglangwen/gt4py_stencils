@@ -1,21 +1,16 @@
 import math
 
-from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
+from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT, FIELD_INT
 
 import gt4py.gtscript as gtscript
 from gt4py.gtscript import PARALLEL, computation, interval
 
-import fv3core._config as spec
-import fv3core.stencils.moist_cv as moist_cv
-import constants
-import utils
-
-from fv3core.stencils.basic_operations import dim
-
+from gtstencil_example import constants
+from gtstencil_example import utils
+import gtstencil_example.namelist as namelist
 
 # TODO, this code could be reduced greatly with abstraction, but first gt4py needs to support gtscript function calls of arbitrary depth embedded in conditionals
 
-si = utils.si
 DC_VAP = constants.CP_VAP - constants.C_LIQ  # - 2339.5, isobaric heating / cooling
 DC_ICE = constants.C_LIQ - constants.C_ICE  # 2213.5, isobaric heating / cooling
 LV0 = (
@@ -39,6 +34,10 @@ LAT2 = (constants.HLV + constants.HLF) ** 2  # used in bigg mechanism
 # TODO, when if blocks are possible,, only compute when 'melting'
 QS_LENGTH = 2621
 
+@gtscript.function
+def dim(a, b):
+    diff = a - b if a - b > 0 else 0
+    return diff
 
 @gtscript.function
 def tem_lower(i):
@@ -519,18 +518,15 @@ def wqsat_correct(src, pt1, lhl, qv, ql, q_liq, q_sol, mc_air, c_vap):
     pt1 = add_src_pt1(pt1, src, lhl, cvm)  # pt1 + src * lhl / cvm
     return qv, ql, q_liq, cvm, pt1
 
-
-@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
-def ap1_stencil(ta: FIELD_FLOAT, ap1: FIELD_FLOAT):
-    with computation(PARALLEL), interval(...):
-        ap1 = ap1_for_wqs2(ta)
-
-
 @gtscript.function
 def ap1_for_wqs2(ta):
     ap1 = 10.0 * dim(ta, TMIN) + 1.0
     return min(ap1, QS_LENGTH) - 1
 
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def ap1_stencil(ta: FIELD_FLOAT, ap1: FIELD_FLOAT):
+    with computation(PARALLEL), interval(...):
+        ap1 = ap1_for_wqs2(ta)
 
 @gtscript.function
 def ap1_index(ap1):
@@ -724,10 +720,12 @@ def satadjust_part1(
             1.0 + tcp3 * dq2dt
         )  # compute_dq0(qv, wqsat, dq2dt, tcp3)  #(qv - wqsat) / (1.0 + tcp3 * dq2dt)
         # TODO might be able to get rid of these temporary allocations when not used?
+        src = 0.0
+        factor = 0.0
         if dq0 > 0:  # whole grid - box saturated
             src = min(
-                spec.namelist.sat_adj0 * dq0,
-                max(spec.namelist.ql_gen - ql, fac_v2l * dq0),
+                namelist.sat_adj0 * dq0,
+                max(namelist.ql_gen - ql, fac_v2l * dq0),
             )
         else:
             # TODO -- we'd like to use this abstraction rather than duplicate code, but inside the if conditional complains 'not implemented'
@@ -800,6 +798,8 @@ def satadjust_part2(
 ):
     with computation(PARALLEL), interval(...):
         dq0 = 0.0
+        src = 0.0
+        factor = 0.0
         if last_step:
             dq0 = compute_dq0(qv, wqsat, dq2dt, tcp3)
             if dq0 > 0:
@@ -868,10 +868,10 @@ def satadjust_part2(
             mc_air,
             qv,
             c_vap,
-            spec.namelist.qs_mlt,
+            namelist.qs_mlt,
         )
         #  autoconversion from cloud water to rain
-        ql, qr = autoconversion_cloud_to_rain(ql, qr, fac_l2r, spec.namelist.ql0_max)
+        ql, qr = autoconversion_cloud_to_rain(ql, qr, fac_l2r, namelist.ql0_max)
         iqs2, dqsdt = wqs2_fn_2(pt1, den)
         expsubl = exp(0.875 * log(qi * den))
         lhl, lhi, lcp2, icp2 = update_latent_heat_coefficient(pt1, cvm, lv00, d0_vap)
@@ -894,9 +894,9 @@ def satadjust_part2(
             c_vap,
             lhl,
             lhi,
-            spec.namelist.t_sub,
-            spec.namelist.qi_gen,
-            spec.namelist.qi_lim,
+            namelist.t_sub,
+            namelist.qi_gen,
+            namelist.qi_lim,
         )
         # virtual temp updated
         q_con = q_liq + q_sol
@@ -914,7 +914,7 @@ def satadjust_part2(
         else:
             qg = qg
         #  autoconversion from cloud ice to snow
-        qim = spec.namelist.qi0_max / den
+        qim = namelist.qi0_max / den
         sink = 0.0
         if qi > qim:
             sink = fac_i2s * (qi - qim)
@@ -968,6 +968,11 @@ def satadjust_part3_laststep_qa(
         wqs1 = wqs1_fn_w(it, ap1, tin, den)
         iqs1 = wqs1_fn_2(it, ap1, tin, den)
         # Determine saturated specific humidity
+        qstar = 0.0
+        rqi = 0.0
+        dq = 0.0
+        q_plus = 0.0
+        q_minus = 0.0
         if tin < T_WFR:
             # ice phase
             qstar = iqs1
@@ -983,8 +988,8 @@ def satadjust_part3_laststep_qa(
         #  higher than 10 m is considered "land" and will have higher subgrid variability
         mindw = min(1.0, abs(hs) / (10.0 * constants.GRAV))
         dw = (
-            spec.namelist.dw_ocean
-            + (spec.namelist.dw_land - spec.namelist.dw_ocean) * mindw
+            namelist.dw_ocean
+            + (namelist.dw_land - namelist.dw_ocean) * mindw
         )
         # "scale - aware" subgrid variability: 100 - km as the base
         dbl_sqrt_area = dw * (area ** 0.5 / 100.0e3) ** 0.5
@@ -1001,7 +1006,7 @@ def satadjust_part3_laststep_qa(
             dq = hvar * qpz
             q_plus = qpz + dq
             q_minus = qpz - dq
-            if spec.namelist.icloud_f == 2:  # TODO untested
+            if namelist.icloud_f == 2:  # TODO untested
                 if qpz > qstar:
                     qa = 1.0
                 elif (qstar < q_plus) and (q_cond > 1.0e-8):
@@ -1013,7 +1018,7 @@ def satadjust_part3_laststep_qa(
                     qa = 1.0
                 else:
                     if qstar < q_plus:
-                        if spec.namelist.icloud_f == 0:
+                        if namelist.icloud_f == 0:
                             qa = (q_plus - qstar) / (dq + dq)
                         else:
                             qa = (q_plus - qstar) / (2.0 * dq * (1.0 - q_cond))
@@ -1021,13 +1026,14 @@ def satadjust_part3_laststep_qa(
                         qa = 0.0
                     # impose minimum cloudiness if substantial q_cond exist
                     if q_cond > 1.0e-8:
-                        qa = max(spec.namelist.cld_min, qa)
+                        qa = max(namelist.cld_min, qa)
                     qa = min(1, qa)
         else:
             qa = 0.0
 
 
 def compute(
+    grid,
     dpln,
     te,
     qvapor,
@@ -1052,22 +1058,21 @@ def compute(
     akap,
     kmp,
 ):
-    grid = spec.grid
     origin = (grid.is_, grid.js, kmp)
     domain = (grid.nic, grid.njc, (grid.npz - kmp))
-    hydrostatic = spec.namelist.hydrostatic
+    hydrostatic = namelist.hydrostatic
     sdt = 0.5 * mdt  # half remapping time step
     # define conversion scalar / factor
-    fac_i2s = 1.0 - math.exp(-mdt / spec.namelist.tau_i2s)
-    fac_v2l = 1.0 - math.exp(-sdt / spec.namelist.tau_v2l)
-    fac_r2g = 1.0 - math.exp(-mdt / spec.namelist.tau_r2g)
-    fac_l2r = 1.0 - math.exp(-mdt / spec.namelist.tau_l2r)
+    fac_i2s = 1.0 - math.exp(-mdt / namelist.tau_i2s)
+    fac_v2l = 1.0 - math.exp(-sdt / namelist.tau_v2l)
+    fac_r2g = 1.0 - math.exp(-mdt / namelist.tau_r2g)
+    fac_l2r = 1.0 - math.exp(-mdt / namelist.tau_l2r)
 
-    fac_l2v = 1.0 - math.exp(-sdt / spec.namelist.tau_l2v)
-    fac_l2v = min(spec.namelist.sat_adj0, fac_l2v)
+    fac_l2v = 1.0 - math.exp(-sdt / namelist.tau_l2v)
+    fac_l2v = min(namelist.sat_adj0, fac_l2v)
 
-    fac_imlt = 1.0 - math.exp(-sdt / spec.namelist.tau_imlt)
-    fac_smlt = 1.0 - math.exp(-mdt / spec.namelist.tau_smlt)
+    fac_imlt = 1.0 - math.exp(-sdt / namelist.tau_imlt)
+    fac_smlt = 1.0 - math.exp(-mdt / namelist.tau_smlt)
 
     # define heat capacity of dry air and water vapor based on hydrostatical property
 
@@ -1150,10 +1155,10 @@ def compute(
             wqsat,
             dq2dt,
             origin=(0, 0, 0),
-            domain=spec.grid.domain_shape_standard(),
+            domain=grid.domain_shape_standard(),
         )
     else:
-        adj_fac = spec.namelist.sat_adj0
+        adj_fac = namelist.sat_adj0
 
     # TODO  -- this isn't a namelist option in Fortran, it is whether or not cld_amount is a tracer. If/when we support different sets of tracers, this will need to change
     do_qa = True
@@ -1202,10 +1207,10 @@ def compute(
         fac_smlt,
         fac_l2r,
         last_step,
-        spec.namelist.rad_snow,
-        spec.namelist.rad_rain,
-        spec.namelist.rad_graupel,
-        spec.namelist.tintqs,
+        namelist.rad_snow,
+        namelist.rad_rain,
+        namelist.rad_graupel,
+        namelist.tintqs,
         origin=origin,
         domain=domain,
     )
@@ -1223,7 +1228,9 @@ def compute(
             origin=origin,
             domain=domain,
         )
-    if not spec.namelist.hydrostatic:
+    """No need to run other stencils
+    if not namelist.hydrostatic:
         moist_cv.compute_pkz_stencil_func(
             pkz, cappa, delp, delz, pt, origin=origin, domain=domain
         )
+    """

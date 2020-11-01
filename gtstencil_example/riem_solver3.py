@@ -6,10 +6,10 @@ from gtstencil_example import BACKEND, REBUILD, FIELD_FLOAT
 from gt4py import gtscript
 from gt4py.gtscript import FORWARD, PARALLEL, computation, interval, __INLINED
 
-import sim1_solver
-import constants
-import utils
-from utils import copy
+from gtstencil_example import sim1_solver
+from gtstencil_example import constants
+from gtstencil_example import utils
+from gtstencil_example.utils import copy
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def precompute(
@@ -161,6 +161,7 @@ def compute(
         domain=domain,
     )
     sim1_solver.solve(
+        grid,
         grid.is_,
         grid.ie,
         grid.js,
