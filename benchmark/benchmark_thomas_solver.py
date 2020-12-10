@@ -40,8 +40,6 @@ def matmul_v(
         with interval(-1, None):
             d = a*x[0, 0, -1] + b*x
 
-n = 1000
-
 def get_storages(shape, origin):
     a = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
     b = gt_storage.from_array(np.random.randn(*shape), BACKEND, origin, dtype=DTYPE_FLOAT)
@@ -55,35 +53,26 @@ def get_storages(shape, origin):
     matmul_v(a, b, c, x, d)
     return a, b, c, d, x
 
-def test_thomas_solver_outofplace():
-    shape = (1, 1, n)
-    default_origin = (0, 0, 0)
-    a, b, c, d, x = get_storages(shape, default_origin)
-    c1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
-    d1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
-    x1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
-
-    thomas_solver_outofplace(a, b, c, d, c1, d1, x1)
-    x1.device_to_host()
-    x.device_to_host()
-    x1_np = x1.view(np.ndarray)
-    x_np = x.view(np.ndarray)
-    assert np.allclose(x_np, x1_np)
-
-def test_thomas_solver_inplace():
-    shape = (1, 1, n)
+def benchmark_thomas_solver_inplace():
+    nk = 128
+    ni = 1000
+    nj = 1000
+    shape = (ni, nj, nk)
     default_origin = (0, 0, 0)
     a, b, c, d, x = get_storages(shape, default_origin)
     x1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
 
     exec_info = {}
     thomas_solver_inplace(a, b, c, d, x1, exec_info=exec_info)
-    x1.device_to_host()
-    x.device_to_host()
-    x1_np = x1.view(np.ndarray)
-    x_np = x.view(np.ndarray)
-    assert np.allclose(x_np, x1_np)
+    #x1.device_to_host()
+    #x.device_to_host()
+    #x1_np = x1.view(np.ndarray)
+    #x_np = x.view(np.ndarray)
+    #assert np.allclose(x_np, x1_np)
+    running_time = exec_info["run_end_time"] - exec_info["run_start_time"]
+    calling_time = exec_info["call_end_time"] - exec_info["call_start_time"]
+    print("Gridsize:(%d,%d,%d)"%(ni,nj,nk))
+    print("Running time of inplace thomas solver: %f seconds, calling time: %f"%(running_time, calling_time))
 
 if __name__ == "__main__":
-    test_thomas_solver_outofplace()
-    test_thomas_solver_inplace()
+    benchmark_thomas_solver_inplace()
