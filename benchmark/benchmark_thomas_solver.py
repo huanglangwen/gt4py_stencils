@@ -55,8 +55,8 @@ def get_storages(shape, origin):
 
 def benchmark_thomas_solver_inplace():
     nk = 128
-    ni = 1000
-    nj = 1000
+    ni = 500
+    nj = 500
     shape = (ni, nj, nk)
     default_origin = (0, 0, 0)
     a, b, c, d, x = get_storages(shape, default_origin)
@@ -64,11 +64,7 @@ def benchmark_thomas_solver_inplace():
 
     exec_info = {}
     thomas_solver_inplace(a, b, c, d, x1, exec_info=exec_info)
-    #x1.device_to_host()
-    #x.device_to_host()
-    #x1_np = x1.view(np.ndarray)
-    #x_np = x.view(np.ndarray)
-    #assert np.allclose(x_np, x1_np)
+
     running_time = exec_info["run_end_time"] - exec_info["run_start_time"]
     calling_time = exec_info["call_end_time"] - exec_info["call_start_time"]
     print("Gridsize:(%d,%d,%d)"%(ni,nj,nk))

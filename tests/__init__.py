@@ -25,8 +25,12 @@ def fix_gt_storage(data_dict):
             fix_gt_storage(data)
 
 
-def read_data(name):
-    with open(os.path.join(os.path.dirname(__file__), f"data/{name}.pickle"), "rb") as f:
+def read_data(name, large=False):
+    if large:
+        prefix = "data_large"
+    else:
+        prefix = "data"
+    with open(os.path.join(os.path.dirname(__file__), f"{prefix}/{name}.pickle"), "rb") as f:
         data = pickle.load(f)
         fix_gt_storage(data)
         return data
