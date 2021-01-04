@@ -9,7 +9,7 @@ except ImportError:
     import os, sys
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
-from gtstencil_example.thomas_solver import thomas_solver_outofplace, thomas_solver_inplace
+from gtstencil_example.thomas_solver import thomas_solver_outofplace, thomas_solver_inplace, thomas_solver_gt_inplace
 
 @gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
 def matmul_v(
@@ -84,6 +84,21 @@ def test_thomas_solver_inplace():
     x_np = x.view(np.ndarray)
     assert np.allclose(x_np, x1_np)
 
+def test_thomas_solver_gt_inplace():
+    shape = (1, 1, n)
+    default_origin = (0, 0, 0)
+    a, b, c, d, x = get_storages(shape, default_origin)
+    x1 = gt_storage.empty(BACKEND, default_origin, shape, dtype=DTYPE_FLOAT)
+
+    exec_info = {}
+    thomas_solver_gt_inplace(a, b, c, d, x1, exec_info=exec_info)
+    x1.device_to_host()
+    x.device_to_host()
+    x1_np = x1.view(np.ndarray)
+    x_np = x.view(np.ndarray)
+    assert np.allclose(x_np, x1_np)
+
 if __name__ == "__main__":
     test_thomas_solver_outofplace()
     test_thomas_solver_inplace()
+    test_thomas_solver_gt_inplace()

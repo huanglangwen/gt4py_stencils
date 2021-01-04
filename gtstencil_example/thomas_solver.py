@@ -73,3 +73,44 @@ def thomas_solver_inplace(
             x = d/b
         with interval(0, -1):
             x = (d - c*x[0, 0, 1])/b
+
+@gtscript.stencil(backend = BACKEND, rebuild = REBUILD)
+def thomas_solver_gt_inplace(
+    a: FIELD_FLOAT,
+    b: FIELD_FLOAT,
+    c: FIELD_FLOAT,
+    d: FIELD_FLOAT,
+    x: FIELD_FLOAT
+):
+    """
+    GridTools version of Inplace Thomas solver for tridiagonal system of size n:
+
+    [b0 c0            ] [x0]   [d0]
+    [a1 b1 c1         ] [x1]   [d1]
+    [   a2 b2 c2      ] [x2] = [d2]
+    [      ...        ] [..]   [..]
+    [         ... cn-1] [..]   [..]
+    [            an bn] [xn]   [dn]
+
+    All input arrays have the shape of (1, 1, n)
+    Assume a[0] = c[n] = 0, even they are not zeros!
+    !CAUTION!: b and d will be modified during the computation
+    """
+    with computation(FORWARD):
+        with interval(0, 1):
+            w = 1/b
+            c = c*w
+            d = d*w
+        with interval(1, -1):
+            w = 1.0/(b - c[0, 0, -1]*a)
+            c = c*w
+            d = (d - d[0, 0, -1]*a)*w
+        with interval(-1, None):
+            w = 1.0/(b - c[0, 0, -1]*a)
+            d = (d - d[0, 0, -1]*a)*w
+
+    with computation(BACKWARD):
+        with interval(-1, None):
+            x = d
+        with interval(0, -1):
+            x = d - c*x[0, 0, 1]
