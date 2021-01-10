@@ -1,6 +1,11 @@
 # How to run this: python gridsearch.py > gridsearch.out 2>&1 & 
-# or : nohup gridsearch.py &
+# or : nohup python gridsearch.py >> gridsearch.out 2>&1 &
 import os
+from subprocess import PIPE, run
+
+def out(command):
+    result = run(command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
+    return result.stdout
 
 from itertools import chain, combinations
 
@@ -23,7 +28,7 @@ def format_command(config, path, ni):
     parameter_str += " ".join([format_opt_method(method, gridsize) for method in config])
     parameter_str += " python " + path + " 100"
     print(f"{config}, {ni}")
-    os.system(parameter_str)
+    print(out(parameter_str))
 
 def main():
     OPTIMIZATION_METHODS = ["IJKLoop", "Prefetching", "ReadonlyCaching", "LoopUnrolling", "KCaching", "BlocksizeAdjusting"]
