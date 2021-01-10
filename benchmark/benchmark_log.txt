@@ -21,6 +21,8 @@ Stencil: Riem_Solver3, time: 0.48899412155151367
 Stencil: Riem_Solver_C, time: 0.4236750602722168
 Stencil: SatAdjust3d, time: 0.7466986179351807
 
+
+#=============================RTX2060 PC====================================
 #Repeat times: 100, backend: cuda
 Stencil: Fillz, time: 182.6004524230957
 Stencil: Riem_Solver3, time: 49.03104281425476
@@ -38,3 +40,50 @@ Stencil: Fillz, time: 183.7636842727661
 Stencil: Riem_Solver3, time: 49.26261639595032
 Stencil: Riem_Solver_C, time: 43.92596483230591
 Stencil: SatAdjust3d, time: 81.4316463470459
+
+env IJKLoop=True Prefetching=True ReadonlyCaching=True LoopUnrolling=True KCaching=True BlocksizeAdjusting="256,8,1" GT4PY_BACKEND=cuda /home/huanglangwen/anaconda3/envs/gt4py/bin/python benchmark/benchmark_fv3core_stencils.py 100
+#Repeat times: 100, backend: cuda
+Stencil: Fillz, time: 71.02421045303345
+Stencil: Riem_Solver3, time: 21.259071826934814
+Stencil: Riem_Solver_C, time: 19.83311438560486
+Stencil: SatAdjust3d, time: 32.094096422195435
+
+
+#===============================P100 Server===================================
+#Repeat times: 100, backend: cuda
+Stencil: Fillz, time: 207.2826988697052
+Stencil: Riem_Solver3, time: 52.998165130615234
+Stencil: Riem_Solver_C, time: 47.40493440628052
+Stencil: SatAdjust3d, time: 77.10774230957031
+
+#Repeat times: 100, backend: gtcuda
+Stencil: Fillz, time: 192.41959071159363
+Stencil: Riem_Solver3, time: 48.810396909713745
+Stencil: Riem_Solver_C, time: 43.28880834579468
+Stencil: SatAdjust3d, time: 72.81747579574585
+
+#Repeat times: 100, backend: original cuda
+Stencil: Fillz, time: 205.52160358428955
+Stencil: Riem_Solver3, time: 53.01673913002014
+Stencil: Riem_Solver_C, time: 48.020349979400635
+Stencil: SatAdjust3d, time: 75.76463484764099
+
+#Repeat times: 100, backend: original cuda + ijk loop
+Stencil: Fillz, time: 197.10360503196716
+Stencil: Riem_Solver3, time: 51.265218019485474
+Stencil: Riem_Solver_C, time: 46.565202713012695
+Stencil: SatAdjust3d, time: 74.01125144958496
+
+#Repeat times: 100, backend: original cuda + ijk loop + prefetching
+Stencil: Fillz, time: 194.91711902618408
+Stencil: Riem_Solver3, time: 51.35217213630676
+Stencil: Riem_Solver_C, time: 46.41488981246948
+Stencil: SatAdjust3d, time: 74.39981865882874
+
+(venv) huanglangwen10@langwen-vm:~/gt4py_stencils$ env IJKLoop=True Prefetching=True ReadonlyCaching=True LoopUnrolling=True KCaching=True BlocksizeAdjusting="256,8,1" GT4PY_BACKEND=cuda python benchmark/benchmark_fv3core_stencils.py 100
+#Repeat times: 100, backend: cuda
+Stencil: Fillz, time: 110.35961055755615
+Stencil: Riem_Solver3, time: 28.937493085861206
+Stencil: Riem_Solver_C, time: 27.755521059036255
+Stencil: SatAdjust3d, time: 43.13828492164612
+
