@@ -11,6 +11,32 @@
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_thomas_solver.py",//"${file}",
             "console": "integratedTerminal",
+            "env": {"GT4PY_BACKEND": "cuda"}
+        },
+        {
+            "name": "Python: benchmark Thomas solver",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/benchmark/benchmark_thomas_solver.py",//"${file}",
+            "console": "integratedTerminal",
+            "env": {"GT4PY_BACKEND": "cuda"}
+        },
+        {
+            "name": "CUDA: benchmark FV3 stencils",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/benchmark/benchmark_fv3core_stencils.py",//"${file}",
+            "console": "integratedTerminal",
+            "args": ["100"],
+            "env": {"GT4PY_BACKEND": "cuda"}
+        },
+        {
+            "name": "GTCUDA: benchmark FV3 stencils",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/benchmark/benchmark_fv3core_stencils.py",//"${file}",
+            "console": "integratedTerminal",
+            "args": ["100"],
             "env": {"GT4PY_BACKEND": "gtcuda"}
         },
         {

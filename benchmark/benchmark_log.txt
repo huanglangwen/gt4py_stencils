@@ -1,0 +1,40 @@
+(gt4py) huanglangwen@hlwPC:~/Code/gt4py_stencils$  cd /home/huanglangwen/Code/gt4py_stencils ; /usr/bin/env /home/huanglangwen/anaconda3/envs/gt4py/bin/python /home/huanglangwen/.vscode/extensions/ms-python.python-2020.12.424452561/pythonFiles/lib/python/debugpy/launcher 45391 -- /home/huanglangwen/Code/gt4py_stencils/benchmark/benchmark_fv3core_stencils.py 
+Stencil: Fillz, time: 1.8037090301513672
+Stencil: Riem_Solver3, time: 0.4784853458404541
+Stencil: Riem_Solver_C, time: 0.4318971633911133
+Stencil: SatAdjust3d, time: 0.7743792533874512
+(gt4py) huanglangwen@hlwPC:~/Code/gt4py_stencils$  cd /home/huanglangwen/Code/gt4py_stencils ; /usr/bin/env /home/huanglangwen/anaconda3/envs/gt4py/bin/python /home/huanglangwen/.vscode/extensions/ms-python.python-2020.12.424452561/pythonFiles/lib/python/debugpy/launcher 42029 -- /home/huanglangwen/Code/gt4py_stencils/benchmark/benchmark_fv3core_stencils.py 
+Stencil: Fillz, time: 1.8180792331695557
+Stencil: Riem_Solver3, time: 0.489105224609375
+Stencil: Riem_Solver_C, time: 0.43262767791748047
+Stencil: SatAdjust3d, time: 0.7948074340820312
+(gt4py) huanglangwen@hlwPC:~/Code/gt4py_stencils$  cd /home/huanglangwen/Code/gt4py_stencils ; /usr/bin/env /home/huanglangwen/anaconda3/envs/gt4py/bin/python /home/huanglangwen/.vscode/extensions/ms-python.python-2020.12.424452561/pythonFiles/lib/python/debugpy/launcher 37593 -- /home/huanglangwen/Code/gt4py_stencils/benchmark/benchmark_fv3core_stencils.py 
+Stencil: Fillz, time: 1.8432154655456543
+Stencil: Riem_Solver3, time: 0.49980831146240234
+Stencil: Riem_Solver_C, time: 0.4365353584289551
+Stencil: SatAdjust3d, time: 0.7964529991149902
+
+#========================GTCUDA========================================
+(gt4py) huanglangwen@hlwPC:~/Code/gt4py_stencils$  cd /home/huanglangwen/Code/gt4py_stencils ; /usr/bin/env /home/huanglangwen/anaconda3/envs/gt4py/bin/python /home/huanglangwen/.vscode/extensions/ms-python.python-2020.12.424452561/pythonFiles/lib/python/debugpy/launcher 42761 -- /home/huanglangwen/Code/gt4py_stencils/benchmark/benchmark_fv3core_stencils.py 
+Stencil: Fillz, time: 1.8340296745300293
+Stencil: Riem_Solver3, time: 0.48899412155151367
+Stencil: Riem_Solver_C, time: 0.4236750602722168
+Stencil: SatAdjust3d, time: 0.7466986179351807
+
+#Repeat times: 100, backend: cuda
+Stencil: Fillz, time: 182.6004524230957
+Stencil: Riem_Solver3, time: 49.03104281425476
+Stencil: Riem_Solver_C, time: 43.96453237533569
+Stencil: SatAdjust3d, time: 73.20754599571228
+
+#Repeat times: 100, backend: gtcuda
+Stencil: Fillz, time: 182.9672567844391
+Stencil: Riem_Solver3, time: 49.09510946273804
+Stencil: Riem_Solver_C, time: 43.034642934799194
+Stencil: SatAdjust3d, time: 73.45069766044617
+
+#Repeat times: 100, backend: original cuda
+Stencil: Fillz, time: 183.7636842727661
+Stencil: Riem_Solver3, time: 49.26261639595032
+Stencil: Riem_Solver_C, time: 43.92596483230591
+Stencil: SatAdjust3d, time: 81.4316463470459

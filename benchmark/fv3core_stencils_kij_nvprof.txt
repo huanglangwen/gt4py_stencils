@@ -1,0 +1,346 @@
+==8824== Profiling application: /home/huanglangwen/anaconda3/envs/gt4py/bin/python /home/huanglangwen/Code/gt4py_stencils/benchmark/benchmark_fv3core_stencils.py
+==8824== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   16.37%  77.172ms         6  12.862ms  12.568ms  13.402ms  satadjust_part1____cuda_dde9f4ca4e_pyext::multi_stage__1021_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, bool, bool, double, double, double, double, double, double, double)
+                   15.77%  74.333ms        48  1.5486ms  1.4388ms  1.8292ms  fix_interior____cuda_2063620f0f_pyext::multi_stage__45_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                   10.31%  48.571ms         6  8.0952ms  7.6406ms  8.8876ms  satadjust_part2____cuda_63f4394da6_pyext::multi_stage__1604_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double, bool, bool, bool, double, double, double, double, double, double, double, double, bool, bool, bool, bool, bool)
+                    8.03%  37.850ms        48  788.55us  673.25us  1.0289ms  fix_interior____cuda_2063620f0f_pyext::multi_stage__43_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    7.70%  36.313ms        48  756.52us  655.36us  927.33us  final_check____cuda_0055141f7e_pyext::multi_stage__9_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*)
+                    7.55%  35.576ms        36  988.23us  776.13us  1.0707ms  copy_stencil____cuda_f05be0d783_pyext::multi_stage__7_kernel(int, int, int, int, int, int, double*, double*)
+                    5.57%  26.276ms         6  4.3793ms  4.1142ms  4.6593ms  satadjust_part3_laststep_qa____cuda_892e21aeba_pyext::multi_stage__513_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    4.77%  22.461ms         6  3.7435ms  3.6886ms  3.9802ms  wqs2_stencil_w____cuda_c0ae6d9bf8_pyext::multi_stage__404_kernel(int, int, int, int, int, int, double*, double*, double*, double*)
+                    4.62%  21.753ms         6  3.6255ms  3.4326ms  4.0761ms  precompute____cuda_2eb28f5d5c_pyext::multi_stage__77_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double)
+                    3.51%  16.548ms         6  2.7580ms  2.4461ms  2.9779ms  precompute____cuda_99401daa2a_pyext::multi_stage__63_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double)
+                    2.60%  12.268ms        12  1.0223ms  488.93us  1.6959ms  sim1_solver____cuda_e6a6187448_pyext::multi_stage__211_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    2.51%  11.809ms         6  1.9682ms  1.7892ms  2.0577ms  precompute____cuda_2eb28f5d5c_pyext::multi_stage__80_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double)
+                    2.23%  10.531ms         6  1.7552ms  1.5979ms  1.9190ms  precompute____cuda_99401daa2a_pyext::multi_stage__60_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double)
+                    1.66%  7.8160ms        48  162.83us  110.69us  539.68us  fix_top____cuda_7c7aaeffe0_pyext::multi_stage__21_kernel(int, int, int, int, int, int, double*, double*, double*)
+                    1.51%  7.0972ms        48  147.86us  111.01us  202.21us  fix_bottom____cuda_f74159120e_pyext::multi_stage__24_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    1.21%  5.7101ms        12  475.84us  474.75us  476.57us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__233_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.82%  3.8470ms        12  320.58us  318.08us  322.27us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__230_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.63%  2.9590ms        12  246.58us  244.74us  248.35us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__220_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.53%  2.5114ms        12  209.28us  205.92us  211.62us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__217_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.45%  2.1241ms        12  177.00us  173.79us  180.19us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__221_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.32%  1.5057ms        12  125.47us  124.32us  127.30us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__232_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.31%  1.4782ms      1124  1.3150us     832ns  174.88us  [CUDA memcpy HtoD]
+                    0.20%  950.94us         6  158.49us  153.31us  160.54us  finalize____cuda_dcfc7c3f7a_pyext::multi_stage__30_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, bool)
+                    0.17%  790.82us        12  65.901us  65.056us  67.264us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__231_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.14%  659.20us        12  54.933us  53.824us  55.648us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__191_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.13%  624.96us        12  52.079us  51.424us  53.152us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__210_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.07%  336.00us         6  55.999us  55.328us  56.608us  finalize____cuda_3c44f58fbf_pyext::multi_stage__29_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    0.07%  315.42us         6  52.570us  51.776us  53.344us  finalize____cuda_dcfc7c3f7a_pyext::multi_stage__31_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, bool)
+                    0.07%  311.55us         6  51.925us  51.456us  52.448us  finalize____cuda_3c44f58fbf_pyext::multi_stage__36_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    0.06%  304.51us         6  50.751us  50.304us  51.616us  finalize____cuda_3c44f58fbf_pyext::multi_stage__37_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    0.02%  108.70us        48  2.2640us  2.1760us  2.4320us  fix_bottom____cuda_f74159120e_pyext::multi_stage__47_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.02%  99.296us        48  2.0680us  1.9200us  3.2000us  fix_top____cuda_7c7aaeffe0_pyext::multi_stage__14_kernel(int, int, int, int, int, int, double*, double*, double*)
+                    0.02%  89.248us        48  1.8590us  1.7920us  1.9200us  fix_bottom____cuda_f74159120e_pyext::multi_stage__49_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.02%  83.360us        48  1.7360us  1.5680us  1.9200us  fix_bottom____cuda_f74159120e_pyext::multi_stage__45_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.02%  81.600us         6  13.600us  13.568us  13.664us  satadjust_part1____cuda_dde9f4ca4e_pyext::multi_stage__250_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, bool, bool, double, double, double, double, double, double, double)
+                    0.01%  51.616us        12  4.3010us  4.0960us  4.7040us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__218_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+      API calls:   91.43%  4.11060s       684  6.0097ms  5.8610us  32.770ms  cudaLaunchKernel
+                    5.22%  234.74ms        11  21.340ms  1.1873ms  222.72ms  cudaHostAlloc
+                    2.83%  127.38ms      1122  113.53us  5.2000us  4.0706ms  cudaMemcpyToSymbol
+                    0.47%  21.102ms         6  3.5170ms  43.020us  20.829ms  cudaMallocManaged
+                    0.02%  1.1083ms        11  100.76us  97.162us  110.55us  cudaMalloc
+                    0.01%  402.84us         2  201.42us  186.74us  216.10us  cudaMemcpy
+                    0.01%  332.57us         1  332.57us  332.57us  332.57us  cuDeviceTotalMem
+                    0.00%  208.03us       101  2.0590us     250ns  87.213us  cuDeviceGetAttribute
+                    0.00%  72.918us        32  2.2780us     500ns  10.460us  cudaGetDevice
+                    0.00%  34.845us         1  34.845us  34.845us  34.845us  cuDeviceGetName
+                    0.00%  7.9940us         3  2.6640us     882ns  4.5480us  cudaSetDevice
+                    0.00%  7.0830us         1  7.0830us  7.0830us  7.0830us  cudaProfilerStart
+                    0.00%  6.5530us         1  6.5530us  6.5530us  6.5530us  cuDeviceGetPCIBusId
+                    0.00%  2.3440us         2  1.1720us     881ns  1.4630us  cudaDeviceGetAttribute
+                    0.00%  2.2950us         3     765ns     461ns  1.1630us  cuDeviceGetCount
+                    0.00%  1.2920us         2     646ns     280ns  1.0120us  cuDeviceGet
+                    0.00%     491ns         1     491ns     491ns     491ns  cuDeviceGetUuid
+
+==8824== Unified Memory profiling result:
+Device "GeForce RTX 2060 (0)"
+   Count  Avg Size  Min Size  Max Size  Total Size  Total Time  Name
+   10238  95.582KB  4.0000KB  0.9961MB  955.6406MB  103.7344ms  Host To Device
+    2918         -         -         -           -  317.9405ms  Gpu page fault groups
+Total CPU Page faults: 48
+
+==8824== NVTX result:
+==8824==   Thread "<unnamed>" (id = 2253465408)
+==8824==     Domain "<unnamed>"
+==8824==       Range "Stencil: copy_stencil, Multi_stage: multi_stage__7"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.14408s        36  31.780ms  30.751ms  32.835ms  Stencil: copy_stencil, Multi_stage: multi_stage__7
+ GPU activities:   99.87%  35.576ms        36  988.23us  776.13us  1.0707ms  copy_stencil____cuda_f05be0d783_pyext::multi_stage__7_kernel(int, int, int, int, int, int, double*, double*)
+                    0.13%  47.008us        36  1.3050us  1.2160us  1.6320us  [CUDA memcpy HtoD]
+      API calls:   99.82%  1.14169s        36  31.714ms  30.681ms  32.770ms  cudaLaunchKernel
+                    0.18%  2.0237ms        36  56.213us  50.214us  58.810us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: final_check, Multi_stage: multi_stage__9"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  4.2827ms        48  89.222us  76.444us  107.42us  Stencil: final_check, Multi_stage: multi_stage__9
+ GPU activities:   99.84%  36.313ms        48  756.52us  655.36us  927.33us  final_check____cuda_0055141f7e_pyext::multi_stage__9_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*)
+                    0.16%  59.776us        48  1.2450us  1.1520us  1.6960us  [CUDA memcpy HtoD]
+      API calls:   63.61%  2.4890ms        48  51.853us  44.875us  65.503us  cudaMemcpyToSymbol
+                   36.39%  1.4237ms        48  29.660us  24.926us  35.086us  cudaLaunchKernel
+
+==8824==       Range "Stencil: finalize, Multi_stage: multi_stage__29"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  368.31us         6  61.385us  60.253us  62.648us  Stencil: finalize, Multi_stage: multi_stage__29
+ GPU activities:   96.82%  336.00us         6  55.999us  55.328us  56.608us  finalize____cuda_3c44f58fbf_pyext::multi_stage__29_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    3.18%  11.039us        12     919ns     863ns  1.1840us  [CUDA memcpy HtoD]
+      API calls:   81.21%  274.47us        12  22.872us  5.4510us  41.609us  cudaMemcpyToSymbol
+                   18.79%  63.509us         6  10.584us  10.219us  11.692us  cudaLaunchKernel
+
+==8824==       Range "Stencil: finalize, Multi_stage: multi_stage__30"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  188.26ms         6  31.377ms  29.984ms  32.148ms  Stencil: finalize, Multi_stage: multi_stage__30
+ GPU activities:   99.23%  950.94us         6  158.49us  153.31us  160.54us  finalize____cuda_dcfc7c3f7a_pyext::multi_stage__30_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, bool)
+                    0.77%  7.3600us         6  1.2260us  1.2160us  1.2480us  [CUDA memcpy HtoD]
+      API calls:   99.83%  187.89ms         6  31.315ms  29.926ms  32.088ms  cudaLaunchKernel
+                    0.17%  312.23us         6  52.039us  48.641us  55.454us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: finalize, Multi_stage: multi_stage__31"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  981.26us         6  163.54us  157.22us  166.11us  Stencil: finalize, Multi_stage: multi_stage__31
+ GPU activities:   98.26%  315.42us         6  52.570us  51.776us  53.344us  finalize____cuda_dcfc7c3f7a_pyext::multi_stage__31_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, bool)
+                    1.74%  5.6000us         6     933ns     928ns     960ns  [CUDA memcpy HtoD]
+      API calls:   93.63%  895.03us         6  149.17us  142.00us  151.37us  cudaMemcpyToSymbol
+                    6.37%  60.855us         6  10.142us  9.6480us  11.051us  cudaLaunchKernel
+
+==8824==       Range "Stencil: finalize, Multi_stage: multi_stage__36"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  187.85ms         6  31.308ms  31.018ms  31.799ms  Stencil: finalize, Multi_stage: multi_stage__36
+ GPU activities:   95.68%  311.55us         6  51.925us  51.456us  52.448us  finalize____cuda_3c44f58fbf_pyext::multi_stage__36_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    4.32%  14.080us        12  1.1730us     864ns  1.6320us  [CUDA memcpy HtoD]
+      API calls:   99.79%  187.40ms         6  31.233ms  30.941ms  31.723ms  cudaLaunchKernel
+                    0.21%  386.34us        12  32.195us  9.0970us  55.483us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: finalize, Multi_stage: multi_stage__37"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  440.82us         6  73.469us  71.825us  74.320us  Stencil: finalize, Multi_stage: multi_stage__37
+ GPU activities:   96.68%  304.51us         6  50.751us  50.304us  51.616us  finalize____cuda_3c44f58fbf_pyext::multi_stage__37_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*)
+                    3.32%  10.464us        12     872ns     864ns     896ns  [CUDA memcpy HtoD]
+      API calls:   89.79%  388.74us        12  32.395us  6.1920us  58.580us  cudaMemcpyToSymbol
+                   10.21%  44.224us         6  7.3700us  6.8930us  8.2250us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_bottom, Multi_stage: multi_stage__24"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  4.9522ms        48  103.17us  92.513us  115.71us  Stencil: fix_bottom, Multi_stage: multi_stage__24
+ GPU activities:   98.56%  7.0972ms        48  147.86us  111.01us  202.21us  fix_bottom____cuda_f74159120e_pyext::multi_stage__24_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    1.44%  103.65us        96  1.0790us     863ns  1.6640us  [CUDA memcpy HtoD]
+      API calls:   67.06%  3.0396ms        96  31.662us  8.1760us  55.845us  cudaMemcpyToSymbol
+                   32.94%  1.4933ms        48  31.109us  27.412us  42.720us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_bottom, Multi_stage: multi_stage__45"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.3169ms        48  27.436us  20.298us  42.590us  Stencil: fix_bottom, Multi_stage: multi_stage__45
+ GPU activities:   50.45%  84.864us        96     884ns     832ns  1.2160us  [CUDA memcpy HtoD]
+                   49.55%  83.360us        48  1.7360us  1.5680us  1.9200us  fix_bottom____cuda_f74159120e_pyext::multi_stage__45_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+      API calls:   61.49%  754.93us        96  7.8630us  5.7710us  9.5780us  cudaMemcpyToSymbol
+                   38.51%  472.79us        48  9.8490us  6.9030us  23.203us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_bottom, Multi_stage: multi_stage__47"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  8.3280ms        48  173.50us  139.20us  230.71us  Stencil: fix_bottom, Multi_stage: multi_stage__47
+ GPU activities:   54.00%  108.70us        48  2.2640us  2.1760us  2.4320us  fix_bottom____cuda_f74159120e_pyext::multi_stage__47_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                   46.00%  92.608us        96     964ns     864ns  1.2160us  [CUDA memcpy HtoD]
+      API calls:   93.33%  7.6608ms        96  79.800us  6.8930us  205.23us  cudaMemcpyToSymbol
+                    6.67%  547.46us        48  11.405us  8.1050us  23.404us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_bottom, Multi_stage: multi_stage__49"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.2918ms        48  26.912us  20.920us  41.598us  Stencil: fix_bottom, Multi_stage: multi_stage__49
+ GPU activities:   51.37%  89.248us        48  1.8590us  1.7920us  1.9200us  fix_bottom____cuda_f74159120e_pyext::multi_stage__49_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                   48.63%  84.480us        96     880ns     832ns  1.2160us  [CUDA memcpy HtoD]
+      API calls:   59.71%  713.87us        96  7.4360us  5.8410us  9.1070us  cudaMemcpyToSymbol
+                   40.29%  481.77us        48  10.036us  7.5340us  23.935us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_interior, Multi_stage: multi_stage__43"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  5.0759ms        48  105.75us  93.505us  109.44us  Stencil: fix_interior, Multi_stage: multi_stage__43
+ GPU activities:   99.77%  37.850ms        48  788.55us  673.25us  1.0289ms  fix_interior____cuda_2063620f0f_pyext::multi_stage__43_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.23%  85.600us        96     891ns     832ns  1.2160us  [CUDA memcpy HtoD]
+      API calls:   67.42%  3.1310ms        96  32.614us  8.3550us  57.197us  cudaMemcpyToSymbol
+                   32.58%  1.5130ms        48  31.520us  27.402us  33.032us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_interior, Multi_stage: multi_stage__45"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  39.149ms        48  815.61us  699.93us  1.0574ms  Stencil: fix_interior, Multi_stage: multi_stage__45
+ GPU activities:   99.87%  74.333ms        48  1.5486ms  1.4388ms  1.8292ms  fix_interior____cuda_2063620f0f_pyext::multi_stage__45_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.13%  98.399us        96  1.0240us     864ns  1.4720us  [CUDA memcpy HtoD]
+      API calls:   98.59%  38.480ms        96  400.83us  7.5540us  1.0327ms  cudaMemcpyToSymbol
+                    1.41%  548.83us        48  11.433us  8.6870us  13.665us  cudaLaunchKernel
+
+==8824==       Range "Stencil: fix_top, Multi_stage: multi_stage__14"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.25934s        48  26.236ms  53.881us  32.615ms  Stencil: fix_top, Multi_stage: multi_stage__14
+ GPU activities:   61.35%  99.296us        48  2.0680us  1.9200us  3.2000us  fix_top____cuda_7c7aaeffe0_pyext::multi_stage__14_kernel(int, int, int, int, int, int, double*, double*, double*)
+                   38.65%  62.560us        48  1.3030us  1.2160us  1.6960us  [CUDA memcpy HtoD]
+      API calls:   99.80%  1.25636s        48  26.174ms  27.161us  32.550ms  cudaLaunchKernel
+                    0.20%  2.5414ms        48  52.945us  23.103us  56.426us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: fix_top, Multi_stage: multi_stage__21"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.5409ms        48  32.103us  17.603us  41.457us  Stencil: fix_top, Multi_stage: multi_stage__21
+ GPU activities:   99.42%  7.8160ms        48  162.83us  110.69us  539.68us  fix_top____cuda_7c7aaeffe0_pyext::multi_stage__21_kernel(int, int, int, int, int, int, double*, double*, double*)
+                    0.58%  45.984us        48     958ns     864ns  1.2480us  [CUDA memcpy HtoD]
+      API calls:   65.87%  885.56us        48  18.449us  7.7040us  26.770us  cudaMemcpyToSymbol
+                   34.13%  458.94us        48  9.5610us  8.1460us  11.061us  cudaLaunchKernel
+
+==8824==       Range "Stencil: precompute, Multi_stage: multi_stage__60"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  190.09ms         6  31.682ms  31.244ms  32.162ms  Stencil: precompute, Multi_stage: multi_stage__60
+ GPU activities:   99.92%  10.531ms         6  1.7552ms  1.5979ms  1.9190ms  precompute____cuda_99401daa2a_pyext::multi_stage__60_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double)
+                    0.08%  8.0960us         6  1.3490us  1.2160us  1.5680us  [CUDA memcpy HtoD]
+      API calls:   99.82%  189.70ms         6  31.616ms  31.176ms  32.102ms  cudaLaunchKernel
+                    0.18%  337.06us         6  56.177us  51.757us  57.748us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: precompute, Multi_stage: multi_stage__63"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  10.592ms         6  1.7653ms  1.6076ms  1.9301ms  Stencil: precompute, Multi_stage: multi_stage__63
+ GPU activities:   99.95%  16.548ms         6  2.7580ms  2.4461ms  2.9779ms  precompute____cuda_99401daa2a_pyext::multi_stage__63_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double)
+                    0.05%  8.2240us         6  1.3700us  1.2160us  1.6640us  [CUDA memcpy HtoD]
+      API calls:   99.25%  10.481ms         6  1.7468ms  1.5905ms  1.9119ms  cudaMemcpyToSymbol
+                    0.75%  79.338us         6  13.223us  11.461us  15.048us  cudaLaunchKernel
+
+==8824==       Range "Stencil: precompute, Multi_stage: multi_stage__77"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  191.27ms         6  31.879ms  30.968ms  32.685ms  Stencil: precompute, Multi_stage: multi_stage__77
+ GPU activities:   99.96%  21.753ms         6  3.6255ms  3.4326ms  4.0761ms  precompute____cuda_2eb28f5d5c_pyext::multi_stage__77_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double)
+                    0.04%  8.0000us         6  1.3330us  1.2160us  1.6640us  [CUDA memcpy HtoD]
+      API calls:   99.83%  190.88ms         6  31.813ms  30.887ms  32.621ms  cudaLaunchKernel
+                    0.17%  321.39us         6  53.565us  48.311us  58.790us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: precompute, Multi_stage: multi_stage__80"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  21.821ms         6  3.6368ms  3.4440ms  4.0890ms  Stencil: precompute, Multi_stage: multi_stage__80
+ GPU activities:   99.94%  11.809ms         6  1.9682ms  1.7892ms  2.0577ms  precompute____cuda_2eb28f5d5c_pyext::multi_stage__80_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double)
+                    0.06%  7.5200us         6  1.2530us  1.2480us  1.2800us  [CUDA memcpy HtoD]
+      API calls:   99.67%  21.719ms         6  3.6198ms  3.4273ms  4.0706ms  cudaMemcpyToSymbol
+                    0.33%  72.145us         6  12.024us  10.870us  13.455us  cudaLaunchKernel
+
+==8824==       Range "Stencil: satadjust_part1, Multi_stage: multi_stage__1021"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  210.06us         6  35.009us  34.555us  35.918us  Stencil: satadjust_part1, Multi_stage: multi_stage__1021
+ GPU activities:   99.99%  77.172ms         6  12.862ms  12.568ms  13.402ms  satadjust_part1____cuda_dde9f4ca4e_pyext::multi_stage__1021_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, bool, bool, double, double, double, double, double, double, double)
+                    0.01%  5.5040us         6     917ns     864ns     992ns  [CUDA memcpy HtoD]
+      API calls:   64.65%  115.87us         6  19.311us  18.785us  19.918us  cudaMemcpyToSymbol
+                   35.35%  63.357us         6  10.559us  10.199us  11.461us  cudaLaunchKernel
+
+==8824==       Range "Stencil: satadjust_part1, Multi_stage: multi_stage__250"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  190.97ms         6  31.829ms  31.406ms  32.079ms  Stencil: satadjust_part1, Multi_stage: multi_stage__250
+ GPU activities:   89.92%  81.600us         6  13.600us  13.568us  13.664us  satadjust_part1____cuda_dde9f4ca4e_pyext::multi_stage__250_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, bool, bool, double, double, double, double, double, double, double)
+                   10.08%  9.1520us         6  1.5250us  1.5040us  1.5360us  [CUDA memcpy HtoD]
+      API calls:   99.83%  190.56ms         6  31.760ms  31.347ms  32.007ms  cudaLaunchKernel
+                    0.17%  332.61us         6  55.435us  49.903us  58.640us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: satadjust_part2, Multi_stage: multi_stage__1604"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  189.59ms         6  31.598ms  31.389ms  32.123ms  Stencil: satadjust_part2, Multi_stage: multi_stage__1604
+ GPU activities:   99.98%  48.571ms         6  8.0952ms  7.6406ms  8.8876ms  satadjust_part2____cuda_63f4394da6_pyext::multi_stage__1604_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double, double, bool, bool, bool, double, double, double, double, double, double, double, double, bool, bool, bool, bool, bool)
+                    0.02%  9.0880us         6  1.5140us  1.5040us  1.5360us  [CUDA memcpy HtoD]
+      API calls:   99.82%  189.18ms         6  31.530ms  31.316ms  32.055ms  cudaLaunchKernel
+                    0.18%  344.01us         6  57.334us  51.517us  64.511us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: satadjust_part3_laststep_qa, Multi_stage: multi_stage__513"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  188.29ms         6  31.382ms  30.516ms  32.177ms  Stencil: satadjust_part3_laststep_qa, Multi_stage: multi_stage__513
+ GPU activities:   99.96%  26.276ms         6  4.3793ms  4.1142ms  4.6593ms  satadjust_part3_laststep_qa____cuda_892e21aeba_pyext::multi_stage__513_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*)
+                    0.04%  9.2480us         6  1.5410us  1.5040us  1.6000us  [CUDA memcpy HtoD]
+      API calls:   99.82%  187.89ms         6  31.315ms  30.451ms  32.103ms  cudaLaunchKernel
+                    0.18%  342.19us         6  57.031us  52.157us  62.387us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__191"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  4.0661ms        12  338.84us  336.49us  340.40us  Stencil: sim1_solver, Multi_stage: multi_stage__191
+ GPU activities:   96.87%  659.20us        12  54.933us  53.824us  55.648us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__191_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    3.13%  21.280us        24     886ns     864ns  1.2160us  [CUDA memcpy HtoD]
+      API calls:   97.68%  3.9531ms        24  164.71us  5.6310us  324.92us  cudaMemcpyToSymbol
+                    2.32%  93.786us        12  7.8150us  6.3820us  8.5060us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__210"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  381.58ms        12  31.799ms  30.174ms  32.501ms  Stencil: sim1_solver, Multi_stage: multi_stage__210
+ GPU activities:   95.96%  624.96us        12  52.079us  51.424us  53.152us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__210_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    4.04%  26.304us        24  1.0960us     864ns  1.6640us  [CUDA memcpy HtoD]
+      API calls:   99.79%  380.66ms        12  31.722ms  30.104ms  32.426ms  cudaLaunchKernel
+                    0.21%  786.73us        24  32.780us  8.7870us  57.478us  cudaMemcpyToSymbol
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__211"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  752.06us        12  62.671us  61.515us  65.352us  Stencil: sim1_solver, Multi_stage: multi_stage__211
+ GPU activities:   99.82%  12.268ms        12  1.0223ms  488.93us  1.6959ms  sim1_solver____cuda_e6a6187448_pyext::multi_stage__211_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.18%  21.760us        24     906ns     832ns  1.2800us  [CUDA memcpy HtoD]
+      API calls:   82.05%  569.61us        24  23.733us  5.2000us  43.141us  cudaMemcpyToSymbol
+                   17.95%  124.60us        12  10.382us  9.6480us  11.522us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__217"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  12.546ms        12  1.0455ms  507.54us  1.7212ms  Stencil: sim1_solver, Multi_stage: multi_stage__217
+ GPU activities:   99.06%  2.5114ms        12  209.28us  205.92us  211.62us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__217_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.94%  23.744us        24     989ns     832ns  1.4720us  [CUDA memcpy HtoD]
+      API calls:   99.21%  12.415ms        24  517.31us  6.6520us  1.7018ms  cudaMemcpyToSymbol
+                    0.79%  99.465us        12  8.2880us  6.8730us  10.329us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__218"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  2.7200ms        12  226.66us  224.04us  228.53us  Stencil: sim1_solver, Multi_stage: multi_stage__218
+ GPU activities:   70.78%  51.616us        12  4.3010us  4.0960us  4.7040us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__218_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                   29.22%  21.312us        24     888ns     864ns  1.1520us  [CUDA memcpy HtoD]
+      API calls:   96.89%  2.6152ms        24  108.97us  5.9910us  213.55us  cudaMemcpyToSymbol
+                    3.11%  84.029us        12  7.0020us  6.2610us  7.4840us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__220"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  264.63us        12  22.052us  20.809us  22.652us  Stencil: sim1_solver, Multi_stage: multi_stage__220
+ GPU activities:   99.29%  2.9590ms        12  246.58us  244.74us  248.35us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__220_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.71%  21.216us        24     884ns     864ns  1.1840us  [CUDA memcpy HtoD]
+      API calls:   66.45%  161.77us        24  6.7400us  5.9420us  7.9450us  cudaMemcpyToSymbol
+                   33.55%  81.681us        12  6.8060us  6.1810us  7.2940us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__221"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  3.1468ms        12  262.24us  260.26us  266.09us  Stencil: sim1_solver, Multi_stage: multi_stage__221
+ GPU activities:   99.03%  2.1241ms        12  177.00us  173.79us  180.19us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__221_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.97%  20.864us        24     869ns     832ns     896ns  [CUDA memcpy HtoD]
+      API calls:   97.48%  3.0495ms        24  127.06us  6.0310us  250.37us  cudaMemcpyToSymbol
+                    2.52%  78.918us        12  6.5760us  5.9810us  7.7850us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__230"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  2.3451ms        12  195.43us  192.16us  199.16us  Stencil: sim1_solver, Multi_stage: multi_stage__230
+ GPU activities:   99.46%  3.8470ms        12  320.58us  318.08us  322.27us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__230_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.54%  20.768us        24     865ns     864ns     896ns  [CUDA memcpy HtoD]
+      API calls:   96.65%  2.2475ms        24  93.644us  6.0910us  183.26us  cudaMemcpyToSymbol
+                    3.35%  77.866us        12  6.4880us  6.1720us  7.0340us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__231"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  867.15us        12  72.262us  71.254us  73.308us  Stencil: sim1_solver, Multi_stage: multi_stage__231
+ GPU activities:   97.43%  790.82us        12  65.901us  65.056us  67.264us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__231_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    2.57%  20.832us        24     868ns     832ns     896ns  [CUDA memcpy HtoD]
+      API calls:   90.04%  765.41us        24  31.892us  5.8710us  57.287us  cudaMemcpyToSymbol
+                    9.96%  84.661us        12  7.0550us  6.6620us  8.1860us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__232"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  982.25us        12  81.854us  80.331us  83.236us  Stencil: sim1_solver, Multi_stage: multi_stage__232
+ GPU activities:   98.62%  1.5057ms        12  125.47us  124.32us  127.30us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__232_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    1.38%  20.992us        24     874ns     864ns     928ns  [CUDA memcpy HtoD]
+      API calls:   92.32%  888.86us        24  37.036us  6.0420us  69.360us  cudaMemcpyToSymbol
+                    7.68%  73.947us        12  6.1620us  5.9210us  6.5830us  cudaLaunchKernel
+
+==8824==       Range "Stencil: sim1_solver, Multi_stage: multi_stage__233"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  1.7230ms        12  143.59us  140.61us  147.70us  Stencil: sim1_solver, Multi_stage: multi_stage__233
+ GPU activities:   99.62%  5.7101ms        12  475.84us  474.75us  476.57us  sim1_solver____cuda_e6a6187448_pyext::multi_stage__233_kernel(int, int, int, int, int, int, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double*, double, double, double, double)
+                    0.38%  21.952us        24     914ns     832ns  1.7920us  [CUDA memcpy HtoD]
+      API calls:   95.30%  1.6269ms        24  67.786us  6.4620us  130.03us  cudaMemcpyToSymbol
+                    4.70%  80.171us        12  6.6800us  5.8610us  11.181us  cudaLaunchKernel
+
+==8824==       Range "Stencil: wqs2_stencil_w, Multi_stage: multi_stage__404"
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+          Range:  100.00%  583.91us         6  97.317us  95.609us  98.795us  Stencil: wqs2_stencil_w, Multi_stage: multi_stage__404
+ GPU activities:   99.96%  22.461ms         6  3.7435ms  3.6886ms  3.9802ms  wqs2_stencil_w____cuda_c0ae6d9bf8_pyext::multi_stage__404_kernel(int, int, int, int, int, int, double*, double*, double*, double*)
+                    0.04%  9.6000us         6  1.6000us  1.5040us  1.8880us  [CUDA memcpy HtoD]
+      API calls:   63.10%  334.91us         6  55.818us  54.894us  57.238us  cudaMemcpyToSymbol
+                   36.90%  195.89us         6  32.647us  31.849us  33.883us  cudaLaunchKernel
