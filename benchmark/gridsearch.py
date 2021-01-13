@@ -30,9 +30,14 @@ def format_command(backend, config, path, ni, outdict):
     parameter_str = f"env GT4PY_BACKEND={backend} "
     parameter_str += " ".join([format_opt_method(method, gridsize) for method in config])
     parameter_str += " python " + os.path.join(path,"benchmark_stencils.py") + " 100"
-    out_arr = np.genfromtxt(StringIO(out(parameter_str)),delimiter=",",skip_header=True)
+    out_str = out(parameter_str)
+    out_arr = np.genfromtxt(StringIO(out_str),delimiter=",",skip_header=True)
     print(f"{config}, {ni}")
     outdict[config+(ni,backend)] = out_arr
+    titles = out_str.split("\n")[0].split(",")
+    for i in range(len(titles)):
+        arr_i = out_arr[:,i]
+        print(f"{titles[i]}: 5% Quantile: {np.quantile(arr_i, 0.05)} Median: {np.median(arr_i)} Mean: {np.average(arr_i)}")
 
 def main():
     OPTIMIZATION_METHODS = ["IJKLoop", "Prefetching", "ReadonlyCaching", "LoopUnrolling", "KCaching", "BlocksizeAdjusting"]
