@@ -2,6 +2,9 @@
 # or : nohup python gridsearch.py >> gridsearch.out 2>&1 &
 import os
 from subprocess import PIPE, run
+import numpy as np
+from io import StringIO
+import pickle
 
 def out(command):
     result = run(command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
@@ -22,25 +25,30 @@ def format_opt_method(opt_method, gridsize):
         source += "=True"
     return source
 
-def format_command(config, path, ni):
+def format_command(backend, config, path, ni, outdict):
     gridsize = [ni, 8, 1]
-    parameter_str = "env GT4PY_BACKEND=cuda "
+    parameter_str = f"env GT4PY_BACKEND={backend} "
     parameter_str += " ".join([format_opt_method(method, gridsize) for method in config])
-    parameter_str += " python " + path + " 100"
+    parameter_str += " python " + os.path.join(path,"benchmark_stencils.py") + " 100"
+    out_arr = np.genfromtxt(StringIO(out(parameter_str)),delimiter=",",skip_header=True)
     print(f"{config}, {ni}")
-    print(out(parameter_str))
+    outdict[config+(ni,backend)] = out_arr
 
 def main():
     OPTIMIZATION_METHODS = ["IJKLoop", "Prefetching", "ReadonlyCaching", "LoopUnrolling", "KCaching", "BlocksizeAdjusting"]
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"benchmark_fv3core_stencils.py")
+    path = os.path.dirname(os.path.abspath(__file__))
+    outdict = dict()
+    format_command("gtcuda", tuple(), path, 32, outdict)
     for config in powerset(OPTIMIZATION_METHODS):
         if "IJKLoop" not in config and ("KCaching" in config or "LoopUnrolling" in config):
             continue
         if "BlocksizeAdjusting" in config:
             for ni in [512, 256, 128, 64, 32]:
-                format_command(config, path, ni)
+                format_command("cuda", config, path, ni, outdict)
         else:
-            format_command(config, path, 32)
+            format_command("cuda", config, path, 32, outdict)
+    with open(os.path.join(path, "gridsearch_out.pickle"), "wb") as f:
+        pickle.dump(outdict, f)
 
 if __name__ == "__main__":
     main()
