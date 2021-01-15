@@ -14,7 +14,7 @@ def summarize_data(mat, method = "median"):
     if method == "median":
         res = np.nanmedian(mat, axis = 0)
     elif method == "mean":
-        res = np.nanaverage(mat, axis = 0)
+        res = np.average(mat, axis = 0)
     elif method == "5%quantile":
         res = np.nanquantile(mat, 0.05, axis = 0)
     elif method == "95%quantile":
@@ -36,7 +36,7 @@ def mark_pareto_front(outdict, method="5%quantile"):
                     on_pareto[key1] = False
     return sum_dict, on_pareto
 
-def plot_parallel(outdict, method="median"):
+def plot_parallel(outdict, method="mean"):
     gt_out = outdict.pop((32,"gtcuda"))
     base_out = outdict[(32,"cuda")] #baseline
     base_med = summarize_data(base_out, method=method)
@@ -65,7 +65,7 @@ def plot_parallel(outdict, method="median"):
     plt.grid(axis='x', color='k', linestyle='-')
     plt.ylabel("Percentage of time reduced (compared with original cuda backend)")
     plt.xlabel("Stencil name")
-    plt.savefig("Gridsearch_2.pdf", bbox_inches="tight")
+    plt.savefig("Gridsearch_mean.pdf", bbox_inches="tight")
     plt.show()
 
 path = os.path.dirname(os.path.abspath(__file__))

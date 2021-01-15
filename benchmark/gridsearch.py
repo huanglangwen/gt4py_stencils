@@ -32,7 +32,7 @@ def format_command(backend, config, path, ni, outdict):
     parameter_str += " python " + os.path.join(path,"benchmark_stencils.py") + " 100"
     out_str = out(parameter_str)
     out_arr = np.genfromtxt(StringIO(out_str),delimiter=",",skip_header=True)
-    print(f"{config}, {ni}")
+    print(f"{backend}, {config}, {ni}")
     outdict[config+(ni,backend)] = out_arr
     titles = out_str.split("\n")[0].split(",")
     for i in range(len(titles)):
