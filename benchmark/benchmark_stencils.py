@@ -54,15 +54,14 @@ def benchmark_thomas_solver_inplace(repeat):
 
 def benchmark_stencil(name, compute_func, repeat: int = 1):
     etime = np.zeros(repeat)
-    for i in range(6):
-        data = read_data(f"{name}_{i}", True)
-        grid = Grid(data["grid_dict"])
-        del data["grid_dict"]
-        data["grid"] = grid
-        for i in range(repeat):
-            datacopy = deepcopy(data)
+    for i in range(repeat):
+        for j in range(6):
+            data = read_data(f"{name}_{j}", True)
+            grid = Grid(data["grid_dict"])
+            del data["grid_dict"]
+            data["grid"] = grid
             t1 = time()
-            compute_func(**datacopy)
+            compute_func(**data)
             etime[i] += time() - t1
     return etime
 
