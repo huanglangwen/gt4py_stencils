@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/huanglangwen/Code/gt4py/src/gt4py/_external_src/gridtools2/include/",
+                "/home/huanglangwen/anaconda3/envs/gtc/lib/python3.8/site-packages/pybind11-2.6.2-py3.8.egg/pybind11/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

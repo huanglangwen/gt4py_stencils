@@ -11,7 +11,7 @@ from gtstencil_example.riem_solver_c import compute as riem_solver_c_compute
 from gtstencil_example.saturation_adjustment import compute as sat_adj_compute
 from gtstencil_example.thomas_solver import thomas_solver_inplace, thomas_solver_gt_inplace
 
-from tests import read_data
+from tests.read_data import read_data
 from tests.mockgrid import Grid
 from tests.test_thomas_solver import matmul_v
 

@@ -36,6 +36,10 @@ def mark_pareto_front(outdict, method="5%quantile"):
                     on_pareto[key1] = False
     return sum_dict, on_pareto
 
+def print_mat(mat):
+    for i in range(len(mat)):
+        print(",".join([str(j) for j in mat[i,:]]))
+
 def plot_parallel(outdict, method="mean"):
     gt_out = outdict.pop((32,"gtcuda"))
     base_out = outdict[(32,"cuda")] #baseline

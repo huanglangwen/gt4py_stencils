@@ -4,11 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Gridsearch",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/benchmark/gridsearch.py",//"${file}",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Analyze Gridsearch",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/benchmark/analyze_gridsearch.py",//"${file}",
             "console": "integratedTerminal",
         },
         {
@@ -18,6 +26,22 @@
             "program": "${workspaceFolder}/tests/test_thomas_solver.py",//"${file}",
             "console": "integratedTerminal",
             "env": {"GT4PY_BACKEND": "cuda"}
+        },
+        {
+            "name": "GTC: test Thomas solver",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_thomas_solver.py",//"${file}",
+            "console": "integratedTerminal",
+            "env": {"GT4PY_BACKEND": "gtc:cuda"}
+        },
+        {
+            "name": "GTC: benchmark async",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/benchmark/benchmark_async.py",//"${file}",
+            "console": "integratedTerminal",
+            "env": {"GT4PY_BACKEND": "gtc:cuda"}
         },
         {
             "name": "Python: benchmark Thomas solver",

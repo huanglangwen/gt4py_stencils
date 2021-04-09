@@ -43,7 +43,7 @@ def main():
     OPTIMIZATION_METHODS = ["IJKLoop", "Prefetching", "ReadonlyCaching", "LoopUnrolling", "KCaching", "BlocksizeAdjusting"]
     path = os.path.dirname(os.path.abspath(__file__))
     outdict = dict()
-    format_command("gtcuda", tuple(), path, 32, outdict)
+    format_command("gtcuda", tuple(), path, 64, outdict)
     for config in powerset(OPTIMIZATION_METHODS):
         if "IJKLoop" not in config and ("KCaching" in config or "LoopUnrolling" in config):
             continue

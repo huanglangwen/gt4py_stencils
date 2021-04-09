@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "/home/huanglangwen/anaconda3/envs/gt4py/bin/python"
+    "python.pythonPath": "~/anaconda3/envs/gtc/bin/python",
+    "files.associations": {
+        "*.cu": "cpp",
+        "array": "cpp",
+        "type_traits": "cpp"
+    },
+    "C_Cpp.default.includePath": []
 }
