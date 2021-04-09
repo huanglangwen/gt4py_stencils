@@ -1,16 +1,18 @@
 try:
     import gtstencil_example
+    import tests
 except ImportError:
     import os, sys
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from tests.read_data import read_data
+from tests.mockgrid import Grid
+
 from gtstencil_example import BACKEND, REBUILD, DTYPE_FLOAT, FIELD_FLOAT
 from gtstencil_example.fillz import compute as fillz_compute
 from gtstencil_example.riem_solver3 import compute as riem_solver3_compute
 from gtstencil_example.riem_solver_c import compute as riem_solver_c_compute
 from gtstencil_example.saturation_adjustment import compute as sat_adj_compute
-
-from tests import read_data
-from tests.mockgrid import Grid
 
 def test_fillz():
     for i in range(6):
