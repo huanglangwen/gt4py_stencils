@@ -11,4 +11,5 @@ DTYPE_FLOAT = np.float64
 DTYPE_INT = np.int_
 FIELD_FLOAT = gtscript.Field[DTYPE_FLOAT]
 FIELD_INT = gtscript.Field[DTYPE_INT]
+DEFAULT_ORIGIN = (0, 0, 0)
 REBUILD = True
