@@ -19,8 +19,9 @@ def benchmark_async_launch(n_iter, async_launch=True, validate=False):
     default_origin = (0, 0, 0)
     x = gt_storage.from_array(np.zeros(shape), BACKEND, default_origin, dtype=DTYPE_FLOAT)
     t1 = time()
+    build_info = {}
     for _ in range(n_iter):
-        add_one(x, async_launch=async_launch, streams=0)
+        add_one(x, async_launch=async_launch, streams=0, build_info=build_info)
     if async_launch:
         cupy.cuda.Device(0).synchronize()
     dt = time() - t1
@@ -32,7 +33,10 @@ def benchmark_async_launch(n_iter, async_launch=True, validate=False):
     return dt
 
 if __name__ == "__main__":
-    n_iter = 100
+    n_iter = 10
+    if BACKEND != "gtc:cuda":
+        print(f"Wrong backend: {BACKEND}")
+        exit(-1)
     print(f"Benchmarking Async launch, iter = {n_iter}")
     t1 = benchmark_async_launch(n_iter, True)
     t2 = benchmark_async_launch(n_iter, False)
