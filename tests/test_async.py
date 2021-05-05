@@ -22,7 +22,8 @@ def test_async_launch(mystream = 0):
     n_iter = 10
     x = gt_storage.zeros(BACKEND, default_origin, shape, DTYPE_FLOAT)
     print(f"Number of Kernels: {add_one.pyext_module.num_kernels()}")
-    print(f"Dependency array: {add_one.pyext_module.dependency()}")
+    print(f"Dependency row ind: {add_one.pyext_module.dependency_row_ind()}")
+    print(f"Dependency col ind: {add_one.pyext_module.dependency_col_ind()}")
     for _ in range(n_iter):
         add_one(x, async_launch=True, streams=mystream)
     x.device_to_host()
@@ -41,10 +42,12 @@ def test_multi_streams(mystream = 0):
     w = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
     print("add_add: ")
     print(f"Number of Kernels: {add_add.pyext_module.num_kernels()}")
-    print(f"Dependency array: {add_add.pyext_module.dependency()}")
+    print(f"Dependency row ind: {add_add.pyext_module.dependency_row_ind()}")
+    print(f"Dependency col ind: {add_add.pyext_module.dependency_col_ind()}")
     print("mul_add: ")
     print(f"Number of Kernels: {mul_add.pyext_module.num_kernels()}")
-    print(f"Dependency array: {mul_add.pyext_module.dependency()}")
+    print(f"Dependency row ind: {mul_add.pyext_module.dependency_row_ind()}")
+    print(f"Dependency col ind: {mul_add.pyext_module.dependency_col_ind()}")
     for _ in range(n_iter):
         add_add(x, y, z, w, async_launch=True, streams=mystream)
     y.device_to_host()
@@ -57,6 +60,9 @@ def test_multi_streams(mystream = 0):
 
 
 def test_gtgraph():
+    n = 512
+    shape = (128, 128, n)
+    default_origin = (0, 0, 0)
     x = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
     y = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
     z = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
@@ -64,6 +70,28 @@ def test_gtgraph():
     add_add(x, y, z, w)
     add_add(x, y, z, w)
     add_add(x, y, z, w)
+
+def test_gtgraph_generated():
+    from gt4py.gtgraph import AsyncContext, async_invoke
+    n_iter = 10
+    async_context = AsyncContext(20)
+    n = 512
+    shape = 128, 128, n
+    default_origin = 0, 0, 0
+    x = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
+    y = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
+    z = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
+    w = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
+    for _ in range(n_iter):
+        async_invoke(async_context, add_add, x, y, z, w)
+    async_context.wait_finish()
+    y.device_to_host()
+    w.device_to_host()
+    y_np = y.view(np.ndarray)
+    w_np = w.view(np.ndarray)
+    ref = np.ones(shape)+n_iter
+    assert np.allclose(y_np, ref)
+    assert np.allclose(w_np, ref)
 
 if __name__ == "__main__":
     mystream = cupy.cuda.stream.Stream(non_blocking=True)
@@ -75,3 +103,4 @@ if __name__ == "__main__":
     print(stencil_ctx)
     func_code = InsertAsync.apply(test_gtgraph, globals())
     print(func_code)
+    test_gtgraph_generated()
