@@ -60,6 +60,7 @@ def test_multi_streams(mystream = 0):
 
 
 def test_gtgraph():
+    n_iter = 10
     n = 512
     shape = (128, 128, n)
     default_origin = (0, 0, 0)
@@ -72,7 +73,7 @@ def test_gtgraph():
     add_add(x, y, z, w)
 
 def test_gtgraph_generated():
-    from gt4py.gtgraph import AsyncContext, async_invoke
+    from gt4py.gtgraph import AsyncContext
     n_iter = 10
     async_context = AsyncContext(20)
     n = 512
@@ -83,7 +84,7 @@ def test_gtgraph_generated():
     z = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
     w = gt_storage.ones(BACKEND, default_origin, shape, DTYPE_FLOAT)
     for _ in range(n_iter):
-        async_invoke(async_context, add_add, x, y, z, w)
+        async_context.schedule(add_add, x, y, z, w)
     async_context.wait_finish()
     y.device_to_host()
     w.device_to_host()
